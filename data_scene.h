@@ -1,0 +1,3 @@
+#pragma once
+//≥°æ∞∂‘œÛ
+static Scene* scene;

@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{1b04990e-dd0b-4c8c-8f15-25fe51265598}</ProjectGuid>
+    <RootNamespace>G</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>F:\Resources\Lib;$(IncludePath)</IncludePath>
+    <LibraryPath>F:\Resources\Lib;$(LibraryPath)</LibraryPath>
+    <SourcePath>F:\Resources\Lib;$(SourcePath)</SourcePath>
+    <ReferencePath>F:\Resources\Lib;F:\Resources\C++\G\sdk\public\steam\lib\win32;$(ReferencePath)</ReferencePath>
+    <ExecutablePath>F:\Resources\Lib;$(ExecutablePath)</ExecutablePath>
+    <ExternalIncludePath>F:\Resources\Lib;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryWPath>F:\Resources\Lib;$(LibraryWPath)</LibraryWPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>F:\Resources\Lib;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>F:\Resources\Lib;$(ExternalIncludePath)</ExternalIncludePath>
+    <ReferencePath>F:\Resources\Lib;F:\Resources\C++\G\sdk\public\steam\lib\win32;$(ReferencePath)</ReferencePath>
+    <LibraryPath>F:\Resources\Lib;$(LibraryPath)</LibraryPath>
+    <SourcePath>F:\Resources\Lib;$(SourcePath)</SourcePath>
+    <LibraryWPath>F:\Resources\Lib;$(LibraryWPath)</LibraryWPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>F:\Resources\Lib;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>F:\Resources\Lib;$(ExternalIncludePath)</ExternalIncludePath>
+    <ReferencePath>F:\Resources\Lib;F:\Resources\C++\G\sdk\public\steam\lib\win32;$(ReferencePath)</ReferencePath>
+    <LibraryPath>F:\Resources\Lib;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>F:\Resources\Lib;$(LibraryWPath)</LibraryWPath>
+    <SourcePath>F:\Resources\Lib;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>F:\Resources\Lib;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>F:\Resources\Lib;$(ExternalIncludePath)</ExternalIncludePath>
+    <ReferencePath>F:\Resources\Lib;F:\Resources\C++\G\sdk\public\steam\lib\win32;$(ReferencePath)</ReferencePath>
+    <LibraryPath>F:\Resources\Lib;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>F:\Resources\Lib;$(LibraryWPath)</LibraryWPath>
+    <SourcePath>F:\Resources\Lib;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;SOIL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>F:\Resources\C++\G;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;SOIL.lib;steam_api.lib;sdkencryptedappticket.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;SOIL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>F:\Resources\Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;SOIL.lib;steam_api.lib;sdkencryptedappticket.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;SOIL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;SOIL.lib;steam_api.lib;sdkencryptedappticket.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;SOIL.lib;steam_api.lib;sdkencryptedappticket.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Lib\glad\glad.c" />
+    <ClCompile Include="G.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="advanced_data.h" />
+    <ClInclude Include="advanced_framebuffers.h" />
+    <ClInclude Include="advanced_ScreenSpaceAmbientOcclusion.h" />
+    <ClInclude Include="advanced_shadow.h" />
+    <ClInclude Include="check_collision.h" />
+    <ClInclude Include="class_collider.h" />
+    <ClInclude Include="class_collider_layer.h" />
+    <ClInclude Include="class_crops.h" />
+    <ClInclude Include="class_cube.h" />
+    <ClInclude Include="class_ray.h" />
+    <ClInclude Include="data_game.h" />
+    <ClInclude Include="data_layer.h" />
+    <ClInclude Include="data_set.h" />
+    <ClInclude Include="data_shader.h" />
+    <ClInclude Include="fixed_update.h" />
+    <ClInclude Include="language.h" />
+    <ClInclude Include="class_math.h" />
+    <ClInclude Include="class_math_character.h" />
+    <ClInclude Include="class_modelx.h" />
+    <ClInclude Include="class_model_obj.h" />
+    <ClInclude Include="class_quad.h" />
+    <ClInclude Include="class_scene.h" />
+    <ClInclude Include="class_square.h" />
+    <ClInclude Include="class_text.h" />
+    <ClInclude Include="class_user_interface.h" />
+    <ClInclude Include="data_camera.h" />
+    <ClInclude Include="data_definition.h" />
+    <ClInclude Include="data_light.h" />
+    <ClInclude Include="data_path.h" />
+    <ClInclude Include="data_player.h" />
+    <ClInclude Include="data_render.h" />
+    <ClInclude Include="data_scene.h" />
+    <ClInclude Include="data_window.h" />
+    <ClInclude Include="event_mouse.h" />
+    <ClInclude Include="function_event.h" />
+    <ClInclude Include="header\data_mode_me.h" />
+    <ClInclude Include="header\initialization.h" />
+    <ClInclude Include="header\mesh_me.h" />
+    <ClInclude Include="header\mode_me.h" />
+    <ClInclude Include="header\set_draw.h" />
+    <ClInclude Include="header\set_loop.h" />
+    <ClInclude Include="header\set_matrix.h" />
+    <ClInclude Include="header\set_shader.h" />
+    <ClInclude Include="header\set_texture.h" />
+    <ClInclude Include="header\set_vertices.h" />
+    <ClInclude Include="header\shader_me.h" />
+    <ClInclude Include="class_model.h" />
+    <ClInclude Include="multiplatform.h" />
+    <ClInclude Include="operator.h" />
+    <ClInclude Include="check_input.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="scene_first.h" />
+    <ClInclude Include="sdk\public\steam\isteamapplist.h" />
+    <ClInclude Include="sdk\public\steam\isteamapps.h" />
+    <ClInclude Include="sdk\public\steam\isteamappticket.h" />
+    <ClInclude Include="sdk\public\steam\isteamclient.h" />
+    <ClInclude Include="sdk\public\steam\isteamcontroller.h" />
+    <ClInclude Include="sdk\public\steam\isteamfriends.h" />
+    <ClInclude Include="sdk\public\steam\isteamgamecoordinator.h" />
+    <ClInclude Include="sdk\public\steam\isteamgameserver.h" />
+    <ClInclude Include="sdk\public\steam\isteamgameserverstats.h" />
+    <ClInclude Include="sdk\public\steam\isteamhtmlsurface.h" />
+    <ClInclude Include="sdk\public\steam\isteamhttp.h" />
+    <ClInclude Include="sdk\public\steam\isteaminput.h" />
+    <ClInclude Include="sdk\public\steam\isteaminventory.h" />
+    <ClInclude Include="sdk\public\steam\isteammatchmaking.h" />
+    <ClInclude Include="sdk\public\steam\isteammusic.h" />
+    <ClInclude Include="sdk\public\steam\isteammusicremote.h" />
+    <ClInclude Include="sdk\public\steam\isteamnetworking.h" />
+    <ClInclude Include="sdk\public\steam\isteamnetworkingmessages.h" />
+    <ClInclude Include="sdk\public\steam\isteamnetworkingsockets.h" />
+    <ClInclude Include="sdk\public\steam\isteamnetworkingutils.h" />
+    <ClInclude Include="sdk\public\steam\isteamparentalsettings.h" />
+    <ClInclude Include="sdk\public\steam\isteamps3overlayrenderer.h" />
+    <ClInclude Include="sdk\public\steam\isteamremoteplay.h" />
+    <ClInclude Include="sdk\public\steam\isteamremotestorage.h" />
+    <ClInclude Include="sdk\public\steam\isteamscreenshots.h" />
+    <ClInclude Include="sdk\public\steam\isteamugc.h" />
+    <ClInclude Include="sdk\public\steam\isteamuser.h" />
+    <ClInclude Include="sdk\public\steam\isteamuserstats.h" />
+    <ClInclude Include="sdk\public\steam\isteamutils.h" />
+    <ClInclude Include="sdk\public\steam\isteamvideo.h" />
+    <ClInclude Include="sdk\public\steam\matchmakingtypes.h" />
+    <ClInclude Include="sdk\public\steam\steamclientpublic.h" />
+    <ClInclude Include="sdk\public\steam\steamencryptedappticket.h" />
+    <ClInclude Include="sdk\public\steam\steamhttpenums.h" />
+    <ClInclude Include="sdk\public\steam\steamnetworkingfakeip.h" />
+    <ClInclude Include="sdk\public\steam\steamnetworkingtypes.h" />
+    <ClInclude Include="sdk\public\steam\steamps3params.h" />
+    <ClInclude Include="sdk\public\steam\steamtypes.h" />
+    <ClInclude Include="sdk\public\steam\steamuniverse.h" />
+    <ClInclude Include="sdk\public\steam\steam_api.h" />
+    <ClInclude Include="sdk\public\steam\steam_api_common.h" />
+    <ClInclude Include="sdk\public\steam\steam_api_flat.h" />
+    <ClInclude Include="sdk\public\steam\steam_api_internal.h" />
+    <ClInclude Include="sdk\public\steam\steam_gameserver.h" />
+    <ClInclude Include="set_shadow.h" />
+    <ClInclude Include="steam.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shader\cube.frag" />
+    <None Include="resources\shader\cube.vert" />
+    <None Include="resources\shader\font.frag" />
+    <None Include="resources\shader\framebuffers.frag" />
+    <None Include="resources\shader\framebuffers.vert" />
+    <None Include="resources\shader\framebuffers_bloom.frag" />
+    <None Include="resources\shader\framebuffers_bloom_first.frag" />
+    <None Include="resources\shader\framebuffers_final.frag" />
+    <None Include="resources\shader\framebuffers_final.geom" />
+    <None Include="resources\shader\light.frag" />
+    <None Include="resources\shader\multiple.frag" />
+    <None Include="resources\shader\multiple.vert" />
+    <None Include="resources\shader\simpleDepthShader-point.frag" />
+    <None Include="resources\shader\simpleDepthShader.frag" />
+    <None Include="resources\shader\simpleDepthShader.geom" />
+    <None Include="resources\shader\simpleDepthShader.vert" />
+    <None Include="resources\shader\ssao.frag" />
+    <None Include="resources\shader\ssao.vert" />
+    <None Include="resources\shader\ssao_blur.frag" />
+    <None Include="resources\shader\ssao_geometry.frag" />
+    <None Include="resources\shader\ssao_geometry.vert" />
+    <None Include="resources\shader\ssao_lighting.frag" />
+    <None Include="resources\shader\ui.frag" />
+    <None Include="resources\shader\ui.vert" />
+    <None Include="resources\shader\ui_font.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="x.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="资源文件\shader">
+      <UniqueIdentifier>{44928802-d445-40a7-8663-15807486a7d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\场景">
+      <UniqueIdentifier>{d44fb826-b91c-40e8-b390-face47c6d66f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\steam">
+      <UniqueIdentifier>{5b566602-2dc4-4e4a-8769-496ed3597c25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\steam1">
+      <UniqueIdentifier>{1f7b6f44-5eba-4b90-97ec-125a6a30855b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\G">
+      <UniqueIdentifier>{64df56a4-eb80-4c18-b172-79c1282cc87a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="G.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lib\glad\glad.c">
+      <Filter>头文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="scene_first.h">
+      <Filter>头文件\场景</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamapplist.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamapps.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamappticket.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamclient.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamcontroller.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamfriends.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamgamecoordinator.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamgameserver.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamgameserverstats.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamhtmlsurface.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamhttp.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteaminput.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteaminventory.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteammatchmaking.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteammusic.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteammusicremote.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamnetworking.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamnetworkingmessages.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamnetworkingsockets.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamnetworkingutils.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamparentalsettings.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamps3overlayrenderer.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamremoteplay.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamremotestorage.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamscreenshots.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamugc.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamuser.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamuserstats.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamutils.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\isteamvideo.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\matchmakingtypes.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steamclientpublic.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steamencryptedappticket.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steamhttpenums.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steamnetworkingfakeip.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steamnetworkingtypes.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steamps3params.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steamtypes.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steamuniverse.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steam_api.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steam_api_common.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steam_api_flat.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steam_api_internal.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\public\steam\steam_gameserver.h">
+      <Filter>头文件\steam</Filter>
+    </ClInclude>
+    <ClInclude Include="advanced_data.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="advanced_framebuffers.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="advanced_ScreenSpaceAmbientOcclusion.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="advanced_shadow.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="check_collision.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_collider.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="check_input.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_collider_layer.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_crops.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_cube.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_math.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_math_character.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_model.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_model_obj.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_modelx.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_quad.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_ray.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_scene.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_square.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_text.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="class_user_interface.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_light.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_layer.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_game.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_definition.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_camera.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_path.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\data_mode_me.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_render.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_player.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_scene.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_set.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_shader.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_window.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="fixed_update.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="event_mouse.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="function_event.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\initialization.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="language.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\mesh_me.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\mode_me.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="multiplatform.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="operator.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\set_draw.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\set_loop.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\set_matrix.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\set_shader.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="set_shadow.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\set_texture.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\set_vertices.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="header\shader_me.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="steam.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shader\framebuffers_bloom_first.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\framebuffers_final.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\framebuffers_final.geom">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\light.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\multiple.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\multiple.vert">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\simpleDepthShader.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\simpleDepthShader.geom">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\simpleDepthShader.vert">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\simpleDepthShader-point.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\ssao.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\ssao.vert">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\ssao_blur.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\ssao_geometry.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\ssao_geometry.vert">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\ssao_lighting.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\ui.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\ui.vert">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\ui_font.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\cube.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\cube.vert">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\framebuffers.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\framebuffers.vert">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\framebuffers_bloom.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\font.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="x.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
