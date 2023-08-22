@@ -115,7 +115,7 @@ static void Load_draw(GLuint *VAO, GLuint *Textrure1, GLuint* Textrure2, GLuint*
 	glBindTexture(GL_TEXTURE_CUBE_MAP, *Textrure3);//天空盒子映射
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	//cout << *Textrure1 << "z+z" << *Textrure2 << endl;
+	//count << *Textrure1 << "z+z" << *Textrure2 << endl;
 	glBindVertexArray(*VAO);
 
 
@@ -152,7 +152,7 @@ static void Load_draw(GLuint* VAO, GLuint* Textrure1, GLuint* Textrure2, GLuint*
 	glBindTexture(GL_TEXTURE_CUBE_MAP, *Textrure3);//天空盒子映射
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, *Textrure4);
-	//cout << *Textrure1 << "z+z" << *Textrure2 << endl;
+	//count << *Textrure1 << "z+z" << *Textrure2 << endl;
 	glBindVertexArray(*VAO);
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -188,7 +188,7 @@ static void Load_draw(GLuint* VAO, GLuint* Textrure1, GLuint* Textrure2, GLuint*
 	glBindTexture(GL_TEXTURE_CUBE_MAP, *Textrure3);//天空盒子映射
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, *Textrure4);
-	//cout << *Textrure1 << "z+z" << *Textrure2 << endl;
+	//count << *Textrure1 << "z+z" << *Textrure2 << endl;
 	glBindVertexArray(*VAO);
 
 	glDrawArrays(GL_TRIANGLES, 0, _verticesCout);

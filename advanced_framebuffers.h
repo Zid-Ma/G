@@ -22,6 +22,7 @@ void Open_framebuffers_firstrender()
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 我们现在不使用模板缓冲
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    Skybox_Draw();
     glEnable(GL_DEPTH_TEST);
 
     if (Active_shadowMap)
@@ -29,6 +30,12 @@ void Open_framebuffers_firstrender()
         //绑定阴影贴图进行渲染
         glActiveTexture(GL_TEXTURE4);
         glBindTexture(GL_TEXTURE_2D, DepthMapFBO_Shadow);
+    }
+    else
+    {
+        //绑定阴影贴图
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, Texture_NULL);
     }
 }
 
@@ -248,7 +255,7 @@ void MSAA_Set()
     glDrawBuffers(2, attachments);
     //检查创建好的帧缓冲是否完整
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        Print::Line("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+        Print::Debug("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

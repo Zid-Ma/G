@@ -33,7 +33,7 @@
     <ClCompile Include="G.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Lib\glad\glad.c">
+    <ClCompile Include="..\..\Source\Lib\C++\Lib_X86\glad.c">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -332,6 +332,21 @@
     <ClInclude Include="steam.h">
       <Filter>头文件\G</Filter>
     </ClInclude>
+    <ClInclude Include="data_story.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="advanced_skybox.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_texture.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_loop.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
+    <ClInclude Include="data_miniMap.h">
+      <Filter>头文件\G</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader\framebuffers_bloom_first.frag">
@@ -407,6 +422,12 @@
       <Filter>资源文件\shader</Filter>
     </None>
     <None Include="resources\shader\font.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\skybox.frag">
+      <Filter>资源文件\shader</Filter>
+    </None>
+    <None Include="resources\shader\skybox.vert">
       <Filter>资源文件\shader</Filter>
     </None>
   </ItemGroup>

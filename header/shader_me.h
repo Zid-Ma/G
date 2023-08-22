@@ -21,7 +21,7 @@ public:
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
         {
             //返回初始化失败信息
-            Print::Line("Failed to initialize GLAD");
+            Print::Debug("Failed to initialize GLAD");
             //return -1;
         }
 
@@ -82,7 +82,7 @@ public:
         }
         catch (std::ifstream::failure& e)
         {
-            Print::Line("错误：着色器无法正确读取文件" + vertexPath +fragmentPath); //ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ
+            Print::Exception("错误：着色器无法正确读取文件" + vertexPath +fragmentPath); //ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ
         }
 
         const char* vShaderCode = vertexCode.c_str();
@@ -93,12 +93,12 @@ public:
         unsigned int vertex = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertex, 1, &vShaderCode, NULL);
         glCompileShader(vertex);
-        checkCompileErrors(vertex, "VERTEX");
+        checkCompileErrors(vertex, "VERTEX", vertexPath);
         // 片段着色器//fragment Shader
         unsigned int fragment = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragment, 1, &fShaderCode, NULL);
         glCompileShader(fragment);
-        checkCompileErrors(fragment, "FRAGMENT");
+        checkCompileErrors(fragment, "FRAGMENT", fragmentPath);
         //如果给定了几何体着色器，编译几何体着色器// if geometry shader is given, compile geometry shader
         unsigned int geometry;
         if (geometryPath != "")
@@ -107,7 +107,7 @@ public:
             geometry = glCreateShader(GL_GEOMETRY_SHADER);
             glShaderSource(geometry, 1, &gShaderCode, NULL);
             glCompileShader(geometry);
-            checkCompileErrors(geometry, "GEOMETRY");
+            checkCompileErrors(geometry, "GEOMETRY", geometryPath);
         }
         // shader Program
         ID = glCreateProgram();
@@ -120,7 +120,7 @@ public:
             glAttachShader(ID, geometry);
         //链接着色器对象
         glLinkProgram(ID);
-        checkCompileErrors(ID, "PROGRAM");
+        checkCompileErrors(ID, "PROGRAM", vertexPath);
         //删除着色器，因为它们现在链接到我们的程序中，不再需要// delete the shaders as they're linked into our program now and no longer necessery
         glDeleteShader(vertex);
         glDeleteShader(fragment);
@@ -197,7 +197,7 @@ public:
 private:
     //用于检查着色器编译/链接错误的实用程序函数。// utility function for checking shader compilation/linking errors.
     // ------------------------------------------------------------------------
-    void checkCompileErrors(GLuint shader, std::string type)
+    void checkCompileErrors(GLuint shader, std::string type, std::string name)
     {
         GLint success;
         GLchar infoLog[1024];
@@ -208,7 +208,7 @@ private:
             {
                 glGetShaderInfoLog(shader, 1024, NULL, infoLog);
                 char* s = infoLog;
-                Print::Line("错误：：着色器编译错误, 类型： " + type + "\n" + infoLog + "\n-- -------------------------------------------------- - -- ");//ERROR::SHADER_COMPILATION_ERROR of type :
+                Print::Exception("错误：：着色器编译错误, 类型： " + type + "\n" + infoLog + "\n着色器名称/路径:" + name  + "\n-- -------------------------------------------------- - -- ");//ERROR::SHADER_COMPILATION_ERROR of type :
             }
         }
         else
@@ -218,7 +218,7 @@ private:
             {
                 glGetProgramInfoLog(shader, 1024, NULL, infoLog);
                 char* s = infoLog;
-                Print::Line("错误：：程序链接错误,类型：" + type + "\n" + infoLog + "\n-- -------------------------------------------------- - -- ");//ERROR::PROGRAM_LINKING_ERROR of type: 
+                Print::Exception("错误：：程序链接错误,类型：" + type + "\n" + infoLog + "\n着色器名称/路径:" + name + "\n-- -------------------------------------------------- - -- ");//ERROR::PROGRAM_LINKING_ERROR of type: 
             }
         }
     }

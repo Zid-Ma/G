@@ -3,7 +3,7 @@
 void Load_loop() 
 {
 #pragma region 每次循环开始
-    //std::cout << "验证是否循环成功" << std::endl;
+    //std::count << "验证是否循环成功" << std::endl;
 
     // 每帧时间逻辑(per-frame time logic)
     //------------------------------------
@@ -19,7 +19,7 @@ void Load_loop()
         //Print::Debug("当前帧率：" + to_string(FramesPerSecond));
         FramesCount = 0.0f;
     }
-    //cout << currentFrame << endl;
+    //count << currentFrame << endl;
     //进程输入
     //--------
     //processInput(Window);

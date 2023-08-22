@@ -417,13 +417,13 @@ void loadObjX(const std::string filename, vector<TriangleMesh*>& _meshs)
 	_mesh->bounding_sphere_c = center;
 	_mesh->bounding_sphere_r = radius;
 
-	std::cout << "----------obj file loaded-------------" << endl;
-	std::cout << "number of faces:" << _mesh->faces.size() << " number of vertices:" << _mesh->verts.size() << endl;
-	std::cout << "obj bounding box: min:("
-		<< _mesh->bounding_box[0].x << "," << _mesh->bounding_box[0].y << "," << _mesh->bounding_box[0].z << ") max:("
-		<< _mesh->bounding_box[1].x << "," << _mesh->bounding_box[1].y << "," << _mesh->bounding_box[1].z << ")" << endl
-		<< "obj bounding sphere center:" << _mesh->bounding_sphere_c.x << "," << _mesh->bounding_sphere_c.y << "," << _mesh->bounding_sphere_c.z << endl
-		<< "obj bounding sphere radius:" << _mesh->bounding_sphere_r << endl;
+	//std::count << "----------obj file loaded-------------" << endl;
+	//std::count << "number of faces:" << _mesh->faces.size() << " number of vertices:" << _mesh->verts.size() << endl;
+	//std::count << "obj bounding box: min:("
+	//	<< _mesh->bounding_box[0].x << "," << _mesh->bounding_box[0].y << "," << _mesh->bounding_box[0].z << ") max:("
+	//	<< _mesh->bounding_box[1].x << "," << _mesh->bounding_box[1].y << "," << _mesh->bounding_box[1].z << ")" << endl
+	//	<< "obj bounding sphere center:" << _mesh->bounding_sphere_c.x << "," << _mesh->bounding_sphere_c.y << "," << _mesh->bounding_sphere_c.z << endl
+	//	<< "obj bounding sphere radius:" << _mesh->bounding_sphere_r << endl;
 
 	Print::Debug("Obj文件加载完成:" + to_string(_mesh->verts.size()));
 
@@ -444,7 +444,7 @@ void loadMtlX(const std::string filename, vector<TriangleMesh*>& _meshs)
 		std::ifstream in(filename.c_str());
 		if (!in.good())
 		{
-			std::cout << "ERROR: loading objMtl:(" << filename << ") file is not good" << "\n";
+			Print::Exception("ERROR: loading objMtl:(" + filename + ") file is not good");
 			return;
 			exit(0);
 		}
@@ -594,11 +594,13 @@ public:
 	~OBJMesh()
 	{
 		Print::Debug("正在尝试删除OBJ对象...");
+		Print::Debug("OBJ对象路径:" + path);
 		try
 		{
 			for (int i = 0; i < meshs.size(); i++)
 			{
 				delete meshs[i];
+				meshs[i] = NULL;
 			}
 		}
 		catch (exception e)
@@ -610,6 +612,7 @@ public:
 			for (int i = 0; i < meshs_vertice.size(); i++)
 			{
 				delete[] meshs_vertice[i];
+				meshs_vertice[i] = NULL;
 			}
 		}
 		catch (exception e)
@@ -621,6 +624,7 @@ public:
 			for (int i = 0; i < meshs_verticeSize.size(); i++)
 			{
 				delete meshs_verticeSize[i];
+				meshs_verticeSize[i] = NULL;
 			}
 		}
 		catch (exception e)
@@ -632,34 +636,45 @@ public:
 			for (int i = 0; i < meshs_vao.size(); i++)
 			{
 				delete meshs_vao[i];
+				meshs_vao[i] = NULL;
 			}
 		}
 		catch (exception e)
 		{
 
 		}
+		Print:: Debug("2");
 		try
 		{
 			bool _mtl_chongfu = false;
 			vector<string>* _mtl_name = new vector<string>;
+			Print::Debug("纹理对象个数:" + to_string(meshs_texture.size()));
 			for (int i = 0; i < meshs_texture.size(); i++)
 			{
 				for (int mi = 0; mi < _mtl_name->size(); mi++)
 				{
+					//Print::Debug("重复名称查找:" + meshs_texture[i]->mtl_name);
 					if ((*_mtl_name)[mi] == meshs_texture[i]->mtl_name)
 						_mtl_chongfu = true;
 				}
 				if (!_mtl_chongfu)
 				{
+					Print::Debug("正尝试删除的纹理对象名称：" + meshs_texture[i]->mtl_name);
 					_mtl_name->push_back(meshs_texture[i]->mtl_name);
-					delete meshs_texture[i];
+					if (meshs_texture[i] != NULL && meshs_texture[i]->mtl_name != "")
+					{
+						delete meshs_texture[i];
+						meshs_texture[i] = NULL;
+					}
 				}
 				else
 				{
 					_mtl_chongfu = false;
 				}
 			}
-			delete _mtl_name;
+			Print::Debug("3");
+			if (_mtl_name->size() > 0)
+				delete _mtl_name;
 		}
 		catch (exception e)
 		{
@@ -673,6 +688,7 @@ public:
 				for (int i = 0; i < meshs_collider.size(); i++)
 				{
 					delete meshs_collider[i];
+					meshs_collider[i] = NULL;
 				}
 			}
 		}
@@ -722,6 +738,18 @@ public:
 				Load_matrix_model(&Model_Mat4, position);
 				//Print::Debug("当前纹理对象参数：" + to_string(meshs_texture[i]->texture1));
 				//if (meshs_texture[i]->texture1 == 0)meshs_texture[i]->texture1 = 1;
+				if (meshs_vao[i] == NULL)
+				{
+					Print::Exception("meshs_vao[i]出现错误:i == " + i);
+				}
+				if (meshs_texture[i] == NULL)
+				{
+					Print::Exception("meshs_texture[i]出现错误:i == " + i);
+				}
+				if (meshs_verticeSize[i] == NULL)
+				{
+					Print::Exception("meshs_verticeSize[i]出现错误:i == " + i);
+				}
 				Load_draw(meshs_vao[i], &(meshs_texture[i]->texture1), &(meshs_texture[i]->texture2), &(meshs_texture[i]->texture3), &(meshs_texture[i]->texture4), shader, *(meshs_verticeSize[i]) / 8);
 			}
 			else if (!meshs[i]->active_collider)
@@ -791,6 +819,10 @@ public:
 			glm::mat4 _model = glm::mat4(1.0f);
 			Load_matrix_model(&_model, _position);
 			Open_Shadow_SetShaderMat4("model", _model);
+			if (meshs_vao[i] == NULL)
+			{
+				Print::Exception("调用函数Draw_Shadow(vec3 _position)时，meshs_vao[i]为NULL，i=" + i);
+			}
 			glBindVertexArray(*meshs_vao[i]);
 			glDrawArrays(GL_TRIANGLES, 0, *(meshs_verticeSize[i]) / 8);
 		}
@@ -872,16 +904,22 @@ public:
 				float* vf = GetOBJVertices(mesh_true, *meshs[i], ci);
 				meshs_verticeSize.push_back(ci);
 				meshs_vertice.push_back(vf);
-				//cout << vertTostring(vf, *meshs_verticeSize[i]) << endl;
-				GLuint vao, vbo;
-				Load_vertices(&vao, &vbo, vf, *meshs_verticeSize[i] * 4);
-				GLuint* vi = new GLuint(vao);//加载相应的vao对象	//LoadOBJVAO(meshs_vertice[i], *meshs_verticeSize[i])
+				//count << vertTostring(vf, *meshs_verticeSize[i]) << endl;
+				GLuint *vao = new GLuint(), *vbo = new GLuint();
+				Load_vertices(vao, vbo, vf, *meshs_verticeSize[i] * 4);
+				GLuint* vi = new GLuint(*vao);//加载相应的vao对象	//LoadOBJVAO(meshs_vertice[i], *meshs_verticeSize[i])
+				delete vao, vbo;
 				//Print::Debug("加载相应vao时数组大小：" + to_string(*meshs_verticeSize[i]));
 				meshs_vao.push_back(vi);
+				if (meshs_vao[i] == NULL)
+				{
+					meshs_vao[i] = vi;
+				}
 				//判断是否已有相同的纹理对象
 				bool material_ = false;
 				for (int veci = 0; veci < vec_mtl->size(); veci++)
 				{
+					//如果当前纹理对象名称相同
 					if ((*vec_mtl)[veci]->mtl_name == meshs[i]->material_usemtl)
 					{
 						material_ = true;
@@ -904,6 +942,15 @@ public:
 			delete vec_mtl;
 			//加载碰撞体对象
 			LoadCollider();
+		}
+		//检测相应模块功能
+		{
+			if (meshs.size() != meshs_vao.size())
+			{
+				Print::Exception("meshs.size() != meshs_vao.size()");
+				int x;
+				cin >>  x;
+			}
 		}
 		for (int i = 0; i < meshs.size(); i++)
 		{
@@ -1104,7 +1151,7 @@ public:
 		}
 		//Print::Debug("OBJ文件顶点数量：" + to_string(*return_vertices_size));
 		//Print::Debug("OBJ文件顶点：");
-		//cout << vertTostring(vf, *return_vertices_size) << endl;
+		//count << vertTostring(vf, *return_vertices_size) << endl;
 		return vf;
 	}
 	//加载OBJ文件对象(顶点数组，长度)
@@ -1194,7 +1241,7 @@ public:
 				Print::Debug(to_string(cci->Point().x) + "|" + to_string(cci->Point().y) + "|" + to_string(cci->Point().z));
 				Print::Debug(to_string(cci->LWH().x) + "|" + to_string(cci->LWH().y) + "|" + to_string(cci->LWH().z));
 				meshs_collider.push_back(cci);
-				//cout << xu << "|" << xd << "|" << yu << "|" << yd << "|" << zu << "|" << zd << endl;
+				//count << xu << "|" << xd << "|" << yu << "|" << yd << "|" << zu << "|" << zd << endl;
 				//string s;
 				//cin >> s;
 				//if (s == "endl")
@@ -1214,17 +1261,29 @@ public:
 			}
 		}
 	}
-	void AddCollider(vec3 _position, vector<Collider_Coboid*>* vcci)
+	//添加碰撞体到相应vector对象中
+	bool AddCollider(vec3 _position, vector<Collider_Coboid*>* vcci)
 	{
-		Print::Debug("碰撞体数量::" + to_string(meshs_collider.size()) + "???" + to_string(meshs_collider[0]->LWH().r) + "," + to_string(meshs_collider[0]->LWH().g) + "," + to_string(meshs_collider[0]->LWH().b));
-		for (int i = 0; i < meshs_collider.size(); i++)
+		Print::Debug("碰撞体数量::" + to_string(meshs_collider.size()) + "???");
+		if (meshs_collider.size() > 0)
 		{
-			//if (Math::Distance_max(_position + meshs_collider[i]->Point(), PlayerPos) < 10)
+			for (int i = 0; i < meshs_collider.size(); i++)
 			{
-				Collider_Coboid* cci = new Collider_Coboid(_position + meshs_collider[i]->Point(), meshs_collider[i]->LWH());
-				vcci->push_back(cci);
+				Print::Debug(to_string(meshs_collider[0]->LWH().r) + "," + to_string(meshs_collider[0]->LWH().g) + "," + to_string(meshs_collider[0]->LWH().b));
+				Print::Debug("------");
+				//if (Math::Distance_max(_position + meshs_collider[i]->Point(), PlayerPos) < 10)
+				{
+					Collider_Coboid* cci = new Collider_Coboid(_position + meshs_collider[i]->Point(), meshs_collider[i]->LWH());
+					vcci->push_back(cci);
+				}
 			}
+			return true;
 		}
+		else
+		{
+			Print::Exception("碰撞体添加时出现错误:无碰撞体可添加");
+		}
+		return false;
 	}
 	//顶点数组转化为string类型(顶点数组地址，数组长度)
 	string vertTostring(float* vert, int count)
@@ -1473,12 +1532,16 @@ public:
 				float* vf = GetOBJVertices(mesh_true, *meshs[i], ci);
 				meshs_verticeSize.push_back(ci);
 				meshs_vertice.push_back(vf);
-				//cout << vertTostring(vf, *meshs_verticeSize[i]) << endl;
+				//count << vertTostring(vf, *meshs_verticeSize[i]) << endl;
 				GLuint vao, vbo;
 				Load_vertices(&vao, &vbo, vf, *meshs_verticeSize[i] * 4);
 				GLuint* vi = new GLuint(vao);//加载相应的vao对象	//LoadOBJVAO(meshs_vertice[i], *meshs_verticeSize[i])
 				//Print::Debug("加载相应vao时数组大小：" + to_string(*meshs_verticeSize[i]));
 				meshs_vao.push_back(vi);
+				if (meshs_vao[i] == NULL)
+				{
+					meshs_vao[i] == vi;
+				}
 				//判断是否已有相同的纹理对象
 				bool material_ = false;
 				for (int veci = 0; veci < vec_mtl->size(); veci++)
@@ -1703,7 +1766,7 @@ public:
 		}
 		//Print::Debug("OBJ文件顶点数量：" + to_string(*return_vertices_size));
 		//Print::Debug("OBJ文件顶点：");
-		//cout << vertTostring(vf, *return_vertices_size) << endl;
+		//count << vertTostring(vf, *return_vertices_size) << endl;
 		return vf;
 	}
 	//加载OBJ文件对象(顶点数组，长度)

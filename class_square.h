@@ -32,7 +32,7 @@ public:
 		First();
 		Load_shader_u(shader,true);
 		Load_matrix_model(&Model_Mat4, _position, vec3(1.0f));
-		Load_draw(&Square::vao, &texture, Square::shader);
+		Load_draw(&Square::vao, &texture, &texture, Square::shader);
 	}
 	static void Draw(GLuint texture, vec3 _position, Shader &_shader)
 	{

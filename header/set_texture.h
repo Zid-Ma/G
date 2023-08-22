@@ -2,6 +2,7 @@
 static GLuint Load_texture_image(string path);
 //------
 //环境纹理对象初始化（纹理对象，图片路径）
+//-图片路径-路径后面需要加斜杠"/"代表文件路径是文件夹
 //------
 GLuint Load_texture_environment(string path);
 //加载纹理图像到显卡内存(图像数据，宽度，高度，加载模式)
@@ -32,12 +33,12 @@ static void Load_texture(GLuint* texture1, GLuint* texture2, GLuint* texture3, s
     if (path1 != "")
     {
         *texture1 = Load_texture_image(path1);
-        cout << texture1 << "x+x" << path1 << endl;
+        //cout << texture1 << "x+x" << path1 << endl;
     }
     if (path2 != "")
     {
         *texture2 = Load_texture_image(path2);
-        cout << texture2 << "y+y" << path2 << endl;
+        //cout << texture2 << "y+y" << path2 << endl;
     }
     if(path3 != "")
     *texture3 = Load_texture_environment(path3);
@@ -50,12 +51,12 @@ static void Load_texture(GLuint* texture1, GLuint* texture2, GLuint* texture3, G
     if (path1 != "")
     {
         *texture1 = Load_texture_image(path1);
-        cout << texture1 << "x+x" << path1 << endl;
+        //cout << texture1 << "x+x" << path1 << endl;
     }
     if (path2 != "")
     {
         *texture2 = Load_texture_image(path2);
-        cout << texture2 << "y+y" << path2 << endl;
+        //cout << texture2 << "y+y" << path2 << endl;
     }
     if (path3 != "")
     *texture3 = Load_texture_environment(path3);
@@ -68,7 +69,7 @@ static void Load_texture(GLuint* texture1, GLuint* texture2, GLuint* texture3, G
 //------
 static GLuint Load_texture_image(string path)
 {
-    GLuint texture;
+    GLuint texture = 0;
     //图片的宽度、高度、读取到的图像类型
     int widthCout, height, nrComponents;
     //翻转y轴
@@ -87,8 +88,8 @@ static GLuint Load_texture_image(string path)
     //Print::Debug(to_string(nrComponents));
 
     int t = (int)&texture;
-    //cout << t << path << endl;
-    Print::Line("图像加载模式：" + to_string(nrComponents) + "::" + to_string(t) + path);
+    //count << t << path << endl;
+    Print::Debug("图像加载模式：" + to_string(nrComponents) + "::" + to_string(t) + path);
     if (image)
     {
         //生成纹理对象,根据纹理参数返回n个纹理索引//生成纹理ID
@@ -128,7 +129,7 @@ static GLuint Load_texture_image(string path)
     }
     else
     {
-        Print::Line("Texture_alpha failed to load at path: " + path);
+        Print::Exception("Texture_alpha failed to load at path: " + path);
     }
 
     //提供纹理坐标
@@ -199,6 +200,8 @@ static GLuint Load_texture_environment(string path) {
 
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+    //翻转y轴
+    stbi_set_flip_vertically_on_load(true);
 
     //加载路径
     vector<std::string> faces
@@ -222,7 +225,7 @@ static GLuint Load_texture_environment(string path) {
         }
         else
         {
-            Print::Line("立方体贴图加载失败/Cubemap texture failed to load at path: " + path);
+            Print::Debug("立方体贴图加载失败/Cubemap texture failed to load at path: " + path);
             stbi_image_free(data);
         }
     }
@@ -233,4 +236,42 @@ static GLuint Load_texture_environment(string path) {
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
     return texture;
+}
+
+//------
+//加载天空盒子（立方体贴图）
+//------
+unsigned int Load_Skyboxmap(vector<std::string> faces)
+{
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+    int width, height, nrComponents;
+    for (unsigned int i = 0; i < faces.size(); i++)
+    {
+        unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrComponents, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            stbi_image_free(data);
+        }
+        else
+        {
+            Print::Debug("天空盒子贴图加载失败/Skybox texture failed to load at path: " + faces[0]);
+            stbi_image_free(data);
+        }
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    return textureID;
+}
+
+void Load_Texture_NULL()
+{
+    Load_texture(&Texture_NULL, Path_Resources + "model/NULL.png");
 }

@@ -37,7 +37,7 @@ public:
     Model()
     {
         first = true;
-        Print::Line("创建了一个模型类...");
+        Print::Debug("创建了一个模型类...");
     }
 
     Model(string path)
@@ -50,14 +50,14 @@ public:
     {
         try
         {
-            Print::Line("正在尝试删除动态创建的模型数据...");
+            Print::Debug("正在尝试删除动态创建的模型数据...");
             if (vertices != NULL)
                 delete[] vertices;
         }
         catch (exception e)
         {
-            Print::Line("删除动态创建的模型数据时出现错误：");
-            Print::Line(e.what());
+            Print::Debug("删除动态创建的模型数据时出现错误：");
+            Print::Debug(e.what());
         }
     }
 
@@ -88,14 +88,14 @@ public:
         if (first)
         {
             Print::Debug("当前模型位置:" + Xpath);
-            Print::Line("加载模型顶点...");
+            Print::Debug("加载模型顶点...");
             load_vao(&vao, &vbo);
-            Print::Line(to_string(sizeof(vertices)));
-            Print::Line("加载模型渲染参数...");
+            Print::Debug(to_string(sizeof(vertices)));
+            Print::Debug("加载模型渲染参数...");
             load_vbo(vertices, sizeof(GLfloat) * vertices_length);
             shader = Shader(Path_Shader + "multiple.vert", Path_Shader + "multiple.frag");
             Load_shader(shader);
-            Print::Line("加载模型贴图...");
+            Print::Debug("加载模型贴图...");
             string t1 = "", t2 = "", t3 = "", t4 ="";
             if (texture_path[0] != "")t1 = Xpath + texture_path[0];
             if (texture_path[1] != "")t2 = Xpath + texture_path[1];
@@ -399,7 +399,7 @@ public:
         while (getline(infile, s))
         {
             s = UTF8ToGB(s.c_str());
-            //cout << s << endl;
+            //count << s << endl;
             if (active_wirte)
             {
                 Print::Debug("modelXXX" + s);
@@ -608,7 +608,7 @@ public:
         return false;
     }
 
-    int cout = 0;
+    int count = 0;
     //读取数据
     bool Data(string s) 
     {
@@ -618,10 +618,10 @@ public:
             return false;
         }
         camma(s.substr(1));
-        if (cout >= vertices_length)
+        if (count >= vertices_length)
         {
-            Print::Line(to_string(cout));
-            cout = 0;
+            Print::Debug(to_string(count));
+            count = 0;
             return true;
         }
         return false;
@@ -635,8 +635,8 @@ public:
         {
             if (s.substr(i,1) == ",")
             {
-                vertices[cout] = stringTofloat(x);
-                cout++;
+                vertices[count] = stringTofloat(x);
+                count++;
                 x = "";
             }
             else

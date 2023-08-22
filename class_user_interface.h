@@ -76,6 +76,7 @@ static unsigned char* Load_FontToPNG(string _load_mode, string _path, string _te
     //Print::Debug(to_string(size));
     //动态创建一个内存空间
     fontBuffer = (unsigned char*)calloc(size, sizeof(unsigned char));
+    //fontBuffer = new unsigned char[size];
     //fontBuffer = new unsigned char(size * sizeof(unsigned char));
     fread(fontBuffer, size, 1, fontFile);//将文件流中的数据读取到内存中
     fclose(fontFile);//关闭文件流
@@ -112,20 +113,21 @@ static unsigned char* Load_FontToPNG(string _load_mode, string _path, string _te
     //    fin.close();
     //}
 
-    //cout << "???0" << endl;
+    //count << "???0" << endl;
     /* 初始化字体 */
     stbtt_fontinfo info;
     if (!stbtt_InitFont(&info, fontBuffer, 0))
     {
         Print::Debug(_debug + "stb init font failed\n");
     }
-    //cout << "???1" << endl;
+    //count << "???1" << endl;
     /* 创建位图 */
     int bitmap_w = 256; /* 位图的宽 */
     bitmap_w = _image_width;
     int bitmap_h = 256; /* 位图的高 */
     bitmap_h = _image_height;
     unsigned char* bitmap = (unsigned char*)calloc(bitmap_w * bitmap_h, sizeof(unsigned char));
+    //unsigned char* bitmap = new unsigned char[bitmap_w * bitmap_h]();
     //unsigned char* bitmap = new unsigned char(bitmap_w * bitmap_h * sizeof(unsigned char));///sizeof(unsigned char)
 
     /* "STB"的 unicode 编码 */
@@ -147,7 +149,7 @@ static unsigned char* Load_FontToPNG(string _load_mode, string _path, string _te
     float pixels = 32.0;                                    /* 字体大小（字号） */
     pixels = _pixels;
     float scale = stbtt_ScaleForPixelHeight(&info, pixels); /* scale = pixels / (ascent - descent) */
-    //cout << "???2" << endl;
+    //count << "???2" << endl;
     /**
      * 获取垂直方向上的度量
      * ascent：字体从基线到顶部的高度；
@@ -159,7 +161,7 @@ static unsigned char* Load_FontToPNG(string _load_mode, string _path, string _te
     int descent = 0;
     int lineGap = 0;
     stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
-    //cout << "???3" << endl;
+    //count << "???3" << endl;
     /* 根据缩放调整字高 */
     ascent = roundf(ascent * scale);//上升
     descent = roundf(descent * scale);//下降
@@ -179,7 +181,7 @@ static unsigned char* Load_FontToPNG(string _load_mode, string _path, string _te
         int leftSideBearing = 0;
         stbtt_GetCodepointHMetrics(&info, word[i], &advanceWidth, &leftSideBearing);
 
-        //cout << "???4" << endl;
+        //count << "???4" << endl;
         /* 获取字符的边框（边界） */
         int c_x1, c_y1, c_x2, c_y2;
         stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
@@ -204,7 +206,7 @@ static unsigned char* Load_FontToPNG(string _load_mode, string _path, string _te
         kern = stbtt_GetCodepointKernAdvance(&info, word[i], word[i + 1]);
         x += roundf(kern * scale);//调整宽度位置索引
 
-        //cout << x << "+" << y << endl;
+        //count << x << "+" << y << endl;
         if (x >= 256)
         {
             x = 0;
@@ -227,7 +229,9 @@ static unsigned char* Load_FontToPNG(string _load_mode, string _path, string _te
     }
     //将动态创建的内存空间释放
     free(fontBuffer);
+    //delete[] fontBuffer;
     free(bitmap);
+    //delete[] bitmap;
 
     return png;
 
@@ -245,6 +249,25 @@ public:
     }
 };
 
+struct UI_Font
+{
+    string name = "";//于代码池中的识别名称
+    vec3 point;//坐标
+    vec3 lwh;//长宽高
+    vec4 color = vec4(0.0f);//RGBA
+    GLuint texture;//OpenGL中的设别代码名称
+    unsigned char* content;//图片的源码
+    int length;//图片的源码长度
+    void* function = NULL;//需要注册的鼠标点击的函数
+    void* hover = PrintHover;//鼠标悬停时的激活函数
+    void* press = PrintPress;//鼠标按下时的激活函数
+    void* release = PrintRelease;//鼠标松开时的激活函数
+    int mod = -1;//当前的显示模式
+    int type = 0;//0为字体类型,1为普通图片
+    GLuint textures[6] = { 0,0,0,0,0,0 };//图像在OpenGL中的设别代码组
+};
+static string Font = "fangzhengheiti.TTF";//所采用的字体格式
+
 class MouseClickEvent
 {
 private:
@@ -252,7 +275,7 @@ private:
     {
         //类型 Square:2D圆形，2D方形
         string type;
-        //状态 down/up/press/release
+        //状态 down/up/press/release/hover
         string state;
         //触发位置
         vec3 point;
@@ -263,6 +286,7 @@ private:
 public:
     Information information;
     function Function;
+    UI_Font* ui_Font;
 public:
     MouseClickEvent()
     {
@@ -286,7 +310,17 @@ public:
         Function = (function)_function;
     }
 
-    void RegisterEvent(string _type, string _state, vec3 _point, vec3 _lwh, void* _function)
+    MouseClickEvent(string _type, string _state, vec3 _point, vec3 _lwh, void* _function, UI_Font* _ui_font)
+    {
+        information.type = _type;
+        information.state = _state;
+        information.point = _point;
+        information.lwh = _lwh;
+        ui_Font = _ui_font;
+        Function = (function)_function;
+    }
+
+    void RegisterEvent(string _type, string _state, vec3 _point, vec3 _lwh, void* _function, UI_Font* _ui_font)
     {
         information.type = _type;
         information.state = _state;
@@ -300,11 +334,21 @@ public:
         Function();
     }
 
-    bool CheckEvent(vec3 _click_point)
+    bool CheckEvent(vec3 _all_point)
     {
+        return CheckEvent(_all_point, information.state);
+    }
+
+    //检测是否激活事件(事件坐标，模式)
+    bool CheckEvent(vec3 _all_point,string _state)
+    {
+        if (_state != information.state)
+        {
+            return false;
+        }
         if (information.type == "Square")
         {
-            if (distance(_click_point, information.point) < information.lwh.r)
+            if (distance(_all_point, information.point) < information.lwh.r)
             {
                 return true;
             }
@@ -315,44 +359,31 @@ public:
             vec2 x = vec2(information.point.r + (information.lwh.r * 0.5f), information.point.r - (information.lwh.r * 0.5f));
             vec2 y = vec2(information.point.g + (information.lwh.g * 0.5f), information.point.g - (information.lwh.g * 0.5f));
             vec2 z = vec2(information.point.b + (information.lwh.b * 0.5f), information.point.b - (information.lwh.b * 0.5f));
-            if (false)
+            if (false && _state == "click")
             {
-                Print::Debug("clickPoint:" + to_string(_click_point.r) + "/" + to_string(_click_point.g) + "/" + to_string(_click_point.b));
-                Print::Debug("Point:" + to_string(information.point.r) + "/" + to_string(information.point.g) + "/" + to_string(information.point.b));
-                Print::Debug("lwh:" + to_string(information.lwh.r) + "/" + to_string(information.lwh.g) + "/" + to_string(information.lwh.b));
-                Print::Debug("x:" + to_string(x.r) + "/" + to_string(x.g));
-                Print::Debug("y:" + to_string(y.r) + "/" + to_string(y.g));
-                Print::Debug("z:" + to_string(z.r) + "/" + to_string(z.g));
+                Print::Line("clickPoint:" + to_string(_all_point.r) + "/" + to_string(_all_point.g) + "/" + to_string(_all_point.b));
+                Print::Line("Point:" + to_string(information.point.r) + "/" + to_string(information.point.g) + "/" + to_string(information.point.b));
+                Print::Line("lwh:" + to_string(information.lwh.r) + "/" + to_string(information.lwh.g) + "/" + to_string(information.lwh.b));
+                Print::Line("x:" + to_string(x.r) + "/" + to_string(x.g));
+                Print::Line("y:" + to_string(y.r) + "/" + to_string(y.g));
+                Print::Line("z:" + to_string(z.r) + "/" + to_string(z.g));
             }
-            if (_click_point.r <= x.r && _click_point.r > x.g)
+            if (_all_point.r <= x.r && _all_point.r >= x.g)
             {
-                if (_click_point.g <= y.r && _click_point.g >= y.g)
+                if (_all_point.g <= y.r && _all_point.g >= y.g)
                 {
-                    if (_click_point.b <= z.r && _click_point.b >= z.g)
+                    if (_all_point.b <= z.r && _all_point.b >= z.g)
                     {
+                        //Print::Line("true");
                         return true;
                     }
                 }
             }
         }
+        //Print::Line("false");
         return false;
     }
 };
-
-struct UI_Font
-{
-    string name = "";
-    vec3 point;
-    vec3 lwh;
-    GLuint texture;
-    unsigned char* content;
-    int length;
-    void* function = NULL;
-    int mod = -1;
-    int type = 0;//0为字体类型,1为普通图片
-    GLuint textures[6] = {0,0,0,0,0,0};
-};
-static string Font = "fangzhengheiti.TTF";
 
 class UI_MessageBox
 {
@@ -391,7 +422,14 @@ public:
         Functions.push_back(_function0);
         Functions.push_back(_function1);
         InitalizationThisFont(_mess, NULL);
-        ThisRegisterEvent(1);
+        if (_function1 != NULL)
+        {
+            ThisRegisterEvent(_type);
+        }
+        else
+        {
+            ThisRegisterEvent(_type);
+        }
     }
     void DrawMessageBox()//_type 0表示仅通知， _type 1表示确认和取消
     {
@@ -434,6 +472,7 @@ public:
     {
         int _collection_count = 3;
         int _collection[5] = { 0,2,3,4,0 };
+        //注册确认消息框
         if (_type == 0)
         {
             _collection_count = 3;
@@ -454,7 +493,7 @@ public:
         for (int i = 0; i < _collection_count; i++)
         {
             if (fonts[_collection[i]].function != NULL)
-                RegisterEvent("", "press", fonts[_collection[i]].point, fonts[_collection[i]].lwh, fonts[_collection[i]].function);
+                RegisterEvent("", "click", fonts[_collection[i]].point, fonts[_collection[i]].lwh, fonts[_collection[i]].function, (void*)&fonts[i]);
         }
     }
 private:
@@ -618,7 +657,7 @@ public:
         while (getline(infile, s))
         {
             s = UTF8ToGB(s.c_str());
-            //cout << s << endl;
+            //count << s << endl;
             if (active_wirte)
             {
                 Print::Debug("UI_Font" + s);

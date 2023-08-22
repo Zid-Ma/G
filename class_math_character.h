@@ -72,7 +72,7 @@ static bitset<16> WStringToByte16(wstring _s)
     bitset<16> bits;
     const wchar_t* s = _s.c_str();
     //char cs = (char)s[0];
-    //cout << *s << endl;
+    //count << *s << endl;
     bits = WCharToByte(s[0]);
     return bits;
 }
@@ -86,7 +86,7 @@ static std::string ToFull(std::string str)
     {
         tmp = str[i];
         tmp1 = str[i + 1];
-        //cout << "uchar:" << (int) tmp << endl;
+        //count << "uchar:" << (int) tmp << endl;
         if (tmp > 32 && tmp < 128)
         {//是半角字符
             result += 163;//第一个字节设置为163
@@ -119,7 +119,7 @@ static string ToHalf(string str) {
     for (unsigned int i = 0; i < str.length(); i++) {
         tmp = str[i];
         tmp1 = str[i + 1];
-        cout << "uchar:" << (int)tmp << endl;
+        Print::Debug("uchar:" + to_string((int)tmp));
         if (tmp == 163) {///第一个字节是163，标志着是全角字符   
             result += (unsigned char)str[i + 1] - 128;
             i++;
@@ -398,4 +398,107 @@ static glm::vec3 StringToVec3(string _s)
     if (vec_count <= 2)
         vec[vec_count] = stringTofloat(s_count);
     return vec;
+}
+
+/// <summary>
+/// 将bool类型转为int类型
+/// </summary>
+/// <param name="_b"></param>
+/// <returns></returns>
+static int BoolToInt(bool _b)
+{
+    if (_b)
+    {
+        return -1;
+    }
+    return 0;
+}
+
+/// <summary>
+/// 获取制表符后的字符
+/// </summary>
+/// <param name="_s"></param>
+/// <returns></returns>
+static string Get_String_InTableBack(string _s)
+{
+    for (int i = 0; i < _s.size(); i++)
+    {
+        if (_s.substr(i, 1) == "\t")
+        {
+            return _s.substr(i + 1);
+        }
+    }
+    return "";
+}
+/// <summary>
+/// 获取制表符后的字符
+/// </summary>
+/// <param name="_s"></param>
+/// <param name="_c">第几个制表符</param>
+/// <returns></returns>
+static string Get_String_InTableBack(string _s,int _c)
+{
+    int count = 0;
+    for (int i = 0; i < _s.size(); i++)
+    {
+        if (_s.substr(i, 1) == "\t")
+        {
+            count++;
+            if(count == _c)
+                return _s.substr(i + 1);
+        }
+    }
+    return "";
+}
+/// <summary>
+/// 获取制表符间的字符
+/// </summary>
+/// <param name="_s"></param>
+/// <param name="_c">第几个制表符</param>
+/// <returns></returns>
+static string Get_String_InTableMiddle(string _s, int _c)
+{
+    int count = 0;
+    bool fined = false;//是否查找到相应制表符
+    string s;
+    for (int i = 0; i < _s.size(); i++)
+    {
+        if (_s.substr(i, 1) == "\t" && !fined)
+        {
+            count++;
+            if (count == _c)
+                bool fined = true;
+        }
+        else if(fined)
+        {
+            if (_s.substr(i, 1) != "\t")
+                s += _s.substr(i, 1);
+            else
+                return s;
+        }
+    }
+    return "";
+}
+/// <summary>
+/// 获取指定字符前的字符
+/// </summary>
+/// <param name="_s"></param>
+/// <param name="_char">指定字符</param>
+/// <returns></returns>
+static string Get_String_InCharacterFont(string _s, string _char)
+{
+    int _char_count = _char.size();
+    string s;
+    for (int i = 0; i < _s.size(); i++)
+    {
+        if (_s.substr(i, _char_count) == _char)
+        {
+            return s;
+        }
+        else
+        {
+            s += _s.substr(i, 1);
+        }
+    }
+    return "";
 }

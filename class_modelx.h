@@ -14,9 +14,10 @@ private:
     float time = 0.0f;
     string Xpath = "";//当前模型X文件的相对位置:如Path_Model + Xpath
     string name_lastAnimation = "";//上一帧动画名称
-    int cout_animations = 0;
+    int cout_animations = 0;//动画数量
     string* animations_name;
     string** animations_path;
+    vector<int> allFrame;
     vector<vector<Model*>*> mods_x0;
 private:
     bool rigid_active;    //是否激活刚体
@@ -39,7 +40,7 @@ public:
     {
         try
         {
-            Print::Line("正在尝试删除动态创建的模型对象...");
+            Print::Debug("正在尝试删除动态创建的模型对象...");
             Delete_Model();
             Print::Debug("动画路径数量:" + to_string(cout_animations));
             Print::Debug("动画名称:" +  *animations_name);
@@ -53,8 +54,8 @@ public:
         }
         catch (exception e)
         {
-            Print::Line("删除动态创建的模型时出现错误：");
-            Print::Line(e.what());
+            Print::Debug("删除动态创建的模型时出现错误：");
+            Print::Debug(e.what());
         }
     }
     /// <summary>
@@ -74,7 +75,7 @@ public:
             b++;
         }
         Xpath = path.substr(0, a + 1);
-        Print::Line("ModelX文件位置：" + Xpath);
+        Print::Debug("ModelX文件位置：" + Xpath);
     }
     /// <summary>
     /// 数据初始化
@@ -119,33 +120,20 @@ public:
         First();
         //绘制当前帧模型
         (*GetAnimations(point))[GetCurrentFrame()]->Draw(position);
-        if (time > 1)
-        {
-            time = 0;
-        }
+        //Print::Debug(to_string(GetCurrentFrame()));
+    }
+    void Draw(vec3 _position, vec3 _scale)
+    {
+        if (first)position = _position;
+        First();
+        //绘制当前帧模型
+        (*GetAnimations(point))[GetCurrentFrame()]->Draw(position,_scale);
     }
     void Draw_Collider(vec3 _position)
     {
         if (first)position = _position;
         First();
-        time += FixedDeltaTime;
-        //获得与当前时间最接近的帧
-        int cur = 0;
-        int zhi = 1000000;
-        float timeCha = 0.0f;
-        float  timeCha0 = 1.0f;
-        float x = 0.0;
-        for (int i = 0; i < _type.zhenlv; i++)
-        {
-            x = i;
-            timeCha = Distance_PtoP(time, x / _type.zhenlv);
-            if (timeCha < timeCha0)
-            {
-                cur = i;
-                timeCha0 = timeCha;
-            }
-        }
-        Physics_Check((*GetAnimations(point))[cur], FixedDeltaTime, &position);
+        Physics_Check((*GetAnimations(point))[GetCurrentFrame()], FixedDeltaTime, &position);
     }
     /*
     模型坐标按照位置进行渲染，并为传入参数赋予当前模型的渲染后的位置值
@@ -156,31 +144,27 @@ public:
         First();
         //绘制当前帧模型
         (*GetAnimations(point))[GetCurrentFrame()]->Draw(_position);
-        if (time > 1)
-        {
-            time = 0;
-        }
     }
     void Draw_Collider(vec3* _position)
     {
         First();
-        time += FixedDeltaTime;
-        //获得与当前时间最接近的帧
-        int cur = 0;
-        int zhi = 1000000;
-        float timeCha = 0.0f;
-        float  timeCha0 = 1.0f;
-        float x = 0.0;
-        for (int i = 0; i < _type.zhenlv; i++)
-        {
-            x = i;
-            timeCha = Distance_PtoP(time, x / _type.zhenlv);
-            if (timeCha < timeCha0)
-            {
-                cur = i;
-                timeCha0 = timeCha;
-            }
-        }
+        //time += FixedDeltaTime;
+        ////获得与当前时间最接近的帧
+        //int cur = 0;
+        //int zhi = 1000000;
+        //float timeCha = 0.0f;
+        //float  timeCha0 = 1.0f;
+        //float x = 0.0;
+        //for (int i = 0; i < _type.zhenlv; i++)
+        //{
+        //    x = i;
+        //    timeCha = Distance_PtoP(time, x / _type.zhenlv);
+        //    if (timeCha < timeCha0)
+        //    {
+        //        cur = i;
+        //        timeCha0 = timeCha;
+        //    }
+        //}
         Physics_Check((*GetAnimations(point))[GetCurrentFrame()], FixedDeltaTime, _position);
         *_position = position;
     }
@@ -242,15 +226,19 @@ public:
         int cur = 0;
         int zhi = 1000000;
         float timeCha = 0.0f;
-        float  timeCha0 = 1.0f;
+        float  timeCha0 = 1;
         float x = 0.0;
-        for (int i = 0; i < _type.zhenlv; i++)
+        //Print::Debug(to_string(allFrame[point]));
+        time += DeltaTime;
+        if (time > allFrame[point] / _type.zhenlv)
+            time = 0;
+        for (int i = 0; i < allFrame[point]; i++)
         {
             x = i;
-            timeCha = Distance_PtoP(time, x / _type.zhenlv);
+            timeCha = Distance_PtoP(time/ (allFrame[point] / _type.zhenlv), x / allFrame[point]);
             if (timeCha < timeCha0)
             {
-                cur = i;
+                cur = x;
                 timeCha0 = timeCha;
             }
         }
@@ -278,10 +266,10 @@ public:
         while (getline(infileX, s))
         {
             s = UTF8ToGB(s.c_str());
-            //cout << s << endl;
+            //count << s << endl;
             if (active_wirte)
             {
-                Print::Line("modelXXX" + s);
+                Print::Debug("modelXXX" + s);
                 if (Data(s))
                 {
                     active_wirte = false;
@@ -338,15 +326,18 @@ public:
             }
             else if (s.substr(0, 4) == "动画")
             {
-                Print::Line(s.substr(0, 4) + ":::" + s);
+                Print::Debug(s.substr(0, 4) + ":::" + s);
                 for (int i = 0; i < cout_animations; i++)
                 {
+                    //遍历出未使用的块
                     if (animations_name[i] == "")
                     {
                         //存入动画名
                         cur_name = s.substr(4 + 1);
+                        if (cur_name == "")
+                            cur_name = "0";
                         animations_name[i] = cur_name;
-                        Print::Line("存入的动画名：" + animations_name[i]);
+                        Print::Debug("存入的动画名：" + animations_name[i]);
                         animations_path[i] = new string[_type.zhenlv];
                         //动态创建模型数组
                         //mods[i] = new Model[_type.zhenlv];
@@ -364,7 +355,7 @@ public:
         }
         return false;
     }
-    int cout = 0;
+    int count = 0;
     //读取数据
     bool Data(string s)
     {
@@ -379,34 +370,52 @@ public:
             {
                 if (animations_name[i] == cur_name)
                 {
+                    //if (animations_path[i] == NULL)
+                    //    animations_path[i] = new string[_type.zhenlv];
                     //获取到需要填入的帧数
-                    int x = atoi(s.substr(2, 1).c_str()) - 1;
-                    if (cout == x)
+                    int x = stoi(Get_String_InCharacterFont(s.substr(1+1),":")) - 1;
+                    Print::Debug(to_string(count) + "???!!!???" + to_string(x));
+                    Print::Debug("");
+                    if (count == x)//判定当前填充帧是否相同
                     {
-                        animations_path[i][cout] = GetLast(s);
-                        Print::Line("???" + to_string(i) + "???" + to_string(x) + "???cout" + to_string(cout) + animations_path[i][cout]);
-                        cout++;
+                        animations_path[i][count] = GetLast(s);
+                        Print::Debug("???" + to_string(i) + "???" + to_string(x) + "???cout" + to_string(count) + animations_path[i][count]);
+                        count++;
                     }
                     else
                     {
                         //将未填充的帧数给补齐
-                        for (int ii = 0; ii < (x - cout + 1); ii++)
+                        for (int ii = 0; ii < (x - count + 1); ii++)
                         {
-                            if (cout + ii == x)
+                            if (count + ii == x)
                             {
-                                animations_path[i][cout + ii] = GetLast(s);
-                                Print::Line("???" + to_string(i) + "???" + to_string(x) + "???" + to_string(cout + ii) + animations_path[i][cout + ii]);
+                                animations_path[i][count + ii] = GetLast(s);
+                                Print::Debug("???" + to_string(i) + "???" + to_string(x) + "???" + to_string(count + ii) + animations_path[i][count + ii]);
                             }
                             else
                             {
                                 //使用前面已填充的帧补齐
-                                animations_path[i][cout + ii] = animations_path[i][cout + ii - 1];
-                                Print::Line("???" + to_string(i) + "???" + to_string(x) + "???" + to_string(cout + ii) + animations_path[i][cout + ii]);
+                                animations_path[i][count + ii] = animations_path[i][count + ii - 1];
+                                Print::Debug("???" + to_string(i) + "???" + to_string(x) + "???" + to_string(count + ii) + animations_path[i][count + ii]);
                             }
                         }
-                        cout = x;
+                        count = x;
                     }
                     break;
+                }
+            }
+        }
+        else if (s.substr(0, 1) == "C")//所有动画帧计数
+        {
+            for (int i = 0; i < cout_animations; i++)
+            {
+                //遍历出未使用的块
+                if (animations_name[i] == cur_name)
+                {
+                    //未使用的块的前一个块则为刚初始化的块
+                    string* _a = animations_path[i];//删除掉刚初始化的块
+                    delete[] _a;
+                    animations_path[i] = new string[stoi(s.substr(1 + 1))];//重新创建一个符合长度的块
                 }
             }
         }
@@ -414,59 +423,71 @@ public:
         {
             for (int i = 0; i < cout_animations; i++)
             {
+                //如果动画名重复
                 if (animations_name[i] == cur_name)
                 {
-                    //将未填充的帧数给补齐
-                    for (int ii = 0; ii < (_type.zhenlv - cout); ii++)
+                    Print::Debug("发现重复动画名" + cur_name);
+                    //将未填充的帧数给补齐(仅仅补齐一秒内所需的帧)
+                    for (int ii = 0; ii < (_type.zhenlv - count); ii++)//for (int ii = 0; ii < (_type.zhenlv - count); ii++)
                     {
                         //使用前面已填充的帧补齐
-                        animations_path[i][cout + ii + 1] = animations_path[i][cout - 1];
+                        animations_path[i][count + ii + 1] = animations_path[i][count - 1];
                     }
-                    cout = _type.zhenlv;
+                    count = allFrame[i];//count = _type.zhenlv;
                     break;
                 }
             }
-            Print::Line(s.substr(0, 4) + ":::" + s);
+            Print::Debug(s.substr(0, 4) + ":::" + s);
             for (int i = 0; i < cout_animations; i++)
             {
+                //如果动画名为空
                 if (animations_name[i] == "")
                 {
+                    Print::Debug("动画名为空");
                     //存入动画名
                     cur_name = s.substr(4 + 1);
                     animations_name[i] = cur_name;
-                    animations_path[i] = new string[_type.zhenlv];
+                    animations_path[i] = new string[allFrame[i]];//_type.zhenlv
                     //动态创建模型数组
                     //mods[i] = new Model[_type.zhenlv];
                     //扩容VECTOR对象
                     //mods[i].reserve(_type.zhenlv);
                 }
             }
-            cout = 0;
+            count = 0;
             return true;
         }
         else if (s.substr(0, 1) == "E")
         {
+            Print::Debug(to_string(count));
+            allFrame.push_back(count);
             for (int i = 0; i < cout_animations; i++)
             {
                 if (animations_name[i] == cur_name)
                 {
-                    //将未填充的帧数给补齐
-                    for (int ii = 0; ii < (_type.zhenlv - cout - 1); ii++)
+                    if (count < _type.zhenlv)
                     {
-                        //使用前面已填充的帧补齐
-                        animations_path[i][cout + ii + 1] = animations_path[i][cout + ii];
-                        Print::Debug("???" + to_string(i) + "???" + to_string(_type.zhenlv) + "???" + to_string(cout + ii + 1) + animations_path[i][cout + ii + 1]);
+                        Print::Debug("发现帧数少于一秒内所需的帧率，给予补齐:");
+                        //将未填充的帧数给补齐
+                        for (int ii = 0; ii < (allFrame[i] - count - 1); ii++)
+                        {
+                            //使用前面已填充的帧补齐
+                            animations_path[i][count + ii + 1] = animations_path[i][count + ii];
+                            Print::Debug("???" + to_string(i) + "???" + to_string(allFrame[i]) + "???" + to_string(count + ii + 1) + animations_path[i][count + ii + 1]);
+                        }
+                        count = allFrame[i] - 1;
                     }
-                    cout = _type.zhenlv - 1;
                     break;
                 }
             }
-            cout = 0;
+            count = 0;
             return true;
         }
-        if (cout >= _type.zhenlv)
+        else if (count >= _type.zhenlv)
         {
-            cout = 0;
+            Print::Debug("未成功读取到“E”为前缀的结尾，当前总帧计数:" + to_string(count));
+            allFrame.push_back(count);
+            count = 0;
             return true;
         }
         return false;
@@ -477,19 +498,20 @@ public:
         for (int i = 0; i < cout_animations; i++)
         {
             vector<Model*>* x = new vector<Model*>;
-            for (int ii = 0; ii < _type.zhenlv; ii++)
+            Print::Debug(to_string(allFrame[i]) + " 当前动画所有帧总数");
+            for (int ii = 0; ii < allFrame[i]; ii++)
             {
                 if (ii != 0)
                 {
                     if (animations_path[i][ii - 1] == animations_path[i][ii])
                     {
-                        Print::Line(animations_path[i][ii - 1] + "???XXX???" + Xpath + animations_path[i][ii]);
+                        Print::Debug(animations_path[i][ii - 1] + "???XXX???" + Xpath + animations_path[i][ii]);
                         x->push_back((*x)[ii - 1]);
                     }
                     else
                     {
                         Model* model = new Model(Xpath + animations_path[i][ii]);
-                        Print::Line("???XXX???" + Xpath + animations_path[i][ii]);
+                        Print::Debug("???XXX???" + Xpath + animations_path[i][ii]);
                         model->alone = false;
                         x->push_back(model);
                     }
@@ -497,13 +519,13 @@ public:
                 else
                 {
                     Model* model = new Model(Xpath + animations_path[i][ii]);
-                    Print::Line("???XXX???" + Xpath + animations_path[i][ii]);
+                    Print::Debug("???XXX???" + Xpath + animations_path[i][ii]);
                     model->alone = false;
                     x->push_back(model);
                 }
             }
             mods_x0.push_back(x);
-            Print::Line("???XXX???" + to_string(x->size()));
+            Print::Debug("???XXX???" + to_string(x->size()));
         }
     }
     //删除模型

@@ -19,9 +19,9 @@ static void Load_shader_goball(Shader& shader)
     if (Active_shader == true)
     {
     }
-    shader.setBool("active.dirLight", Active_shader_dirLight);
-    shader.setBool("active.pointLight", Active_shader_pointLight);
-    shader.setBool("active.spotLight", Active_shader_spotLight);
+    shader.setBool("attritubeActive.dirLight", Active_shader_dirLight);
+    shader.setBool("attritubeActive.pointLight", Active_shader_pointLight);
+    shader.setBool("attritubeActive.spotLight", Active_shader_spotLight);
 
     shader.setVec3("viewPos", CameraPos);
     shader.setVec3("spotLight.position", CameraPos);
@@ -63,21 +63,21 @@ static void Load_shader_d(Shader &shader, GLuint *Texture1, GLuint *Texture2, GL
     shader.setBool("material.active_shadowMap", Active_shadowMap);
     shader.setBool("material.active_shadowMap", Active_ssao);
 
-    shader.setBool("active.dirLight", Active_shader_dirLight);
-    shader.setBool("active.pointLight", Active_shader_pointLight);
-    shader.setBool("active.spotLight", Active_shader_spotLight);
+    shader.setBool("attritubeActive.dirLight", Active_shader_dirLight);
+    shader.setBool("attritubeActive.pointLight", Active_shader_pointLight);
+    shader.setBool("attritubeActive.spotLight", Active_shader_spotLight);
 
     shader.setVec3("viewPos", CameraPos);
     shader.setFloat("material.shininess", 32.0f);
 
     // directional light
     shader.setVec3("dirLight.direction", 10.2f, 10.0f, 10.3f);//定向光位置 -0.2f, -1.0f, -0.3f
-    shader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+    shader.setVec3("dirLight.ambient", AmbientLight);//环境光照 0.05f, 0.05f, 0.05f
     shader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
     shader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
     // point light 1
     shader.setVec3("pointLights[0].position", PointLightPositions[0]);//点光源位置
-    shader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+    shader.setVec3("pointLights[0].ambient", AmbientLight);
     shader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
     shader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
     shader.setFloat("pointLights[0].constant", 1.0f);
@@ -85,7 +85,7 @@ static void Load_shader_d(Shader &shader, GLuint *Texture1, GLuint *Texture2, GL
     shader.setFloat("pointLights[0].quadratic", 0.032);
     // point light 2
     shader.setVec3("pointLights[1].position", PointLightPositions[1]);
-    shader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+    shader.setVec3("pointLights[1].ambient", AmbientLight);
     shader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
     shader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
     shader.setFloat("pointLights[1].constant", 1.0f);

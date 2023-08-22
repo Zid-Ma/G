@@ -27,7 +27,7 @@ void Open_Shadow_SetShaderMat4(const string& _name, const mat4& _mat);
 void Open_shadow()
 {
 
-    Print::Line("阴影映射 - 定向阴影映射正在启用……");
+    Print::Debug("阴影映射 - 定向阴影映射正在启用……");
 
     //深度贴图
     //---------
@@ -35,7 +35,7 @@ void Open_shadow()
     SimpleDepthShader = Shader(Path_Shader + "simpleDepthShader.vert", Path_Shader + "simpleDepthShader.frag");
     SimpleDepthShader.use();
 
-    std::cout << "阴影映射" << endl;
+    Print::Debug("阴影映射");
 
     //为渲染的深度贴图创建一个帧缓冲对象
     DepthFBO_Shadow;
@@ -91,7 +91,7 @@ void Open_shadow_firstrender_begin()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, DepthMapFBO_Shadow);
     //ConfigureShaderAndMatrices();
-    int _magnification = 3;
+    int _magnification = 2;//3
     //将为光源使用正交投影矩阵，透视图将没有任何变形
     glm::mat4 lightProjection = glm::ortho(-10.0f * _magnification, 10.0f * _magnification, -10.0f * _magnification, 10.0f * _magnification, Near_plane, Far_plane);
     glm::vec3 _front, _up;
@@ -104,7 +104,7 @@ void Open_shadow_firstrender_begin()
     _up.y = sin(glm::radians(_pitch));
     _up.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
     //创建一个视图矩阵来变换每个物体，把它们变换到从光源视角可见的空间中         //glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp)//pointLightPositions[]
-    glm::mat4 lightView = glm::lookAt(PlayerPos + (vec3(-7, 25, 13) * 3.0f), PlayerPos + (vec3(-7, 25, 13) * 3.0f) +  _front, _up); //glm::lookAt(glm::vec3(-1.0f, 3.0f, 0.0f), glm::vec3(-1.0f, 3.0f, 0.0f) + glm::vec3(-1.0, -1.0, 0.0), glm::vec3(0.0f, -1.0f, -1.0)); ;//glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 lightView = glm::lookAt(PlayerPos + (vec3(-7, 25, 13) * 2.0f), PlayerPos + (vec3(-7, 25, 13) * 2.0f) +  _front, _up); //glm::lookAt(glm::vec3(-1.0f, 3.0f, 0.0f), glm::vec3(-1.0f, 3.0f, 0.0f) + glm::vec3(-1.0, -1.0, 0.0), glm::vec3(0.0f, -1.0f, -1.0)); ;//glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     //mat4 lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     //二者相结合为我们提供了一个光空间的变换矩阵
     glm::mat4 lightSpaceMatrix = lightProjection * lightView;

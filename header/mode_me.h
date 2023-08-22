@@ -66,7 +66,7 @@ private:
         // check for errors
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
         {
-            cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+            Print::Exception("ERROR::ASSIMP:: " + (string)importer.GetErrorString());
             return;
         }
         //检索文件路径的目录路径
@@ -293,7 +293,7 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
         else
             format = 3;
 
-        std::cout << "Texture find to load at path: " << format << std::endl;
+        Print::Exception("Texture find to load at path: " + format);
 
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexImage2D(GL_TEXTURE_2D, 0, format, widthCout, height, 0, format, GL_UNSIGNED_BYTE, data);
@@ -309,7 +309,7 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
     }
     else
     {
-        std::cout << "Texture failed to load at path: " << path << std::endl;
+        Print::Exception("Texture failed to load at path: " + path);
         stbi_image_free(data);
     }
 

@@ -38,8 +38,8 @@ public:
 	{
 		//获取字符的ASCII码
 		int i = c;
-		int cout = i / widthCount;
-		return cout;
+		int count = i / widthCount;
+		return count;
 	}
 
 	//获取字符在贴图的列位置
@@ -47,8 +47,8 @@ public:
 	{
 		//获取字符的ASCII码
 		int i = c;
-		int cout = i % widthCount;
-		return cout;
+		int count = i % widthCount;
+		return count;
 	}
 
 	static int LengthCount(string s)
@@ -60,13 +60,13 @@ public:
 		{
 			const TCHAR tc = c[0] + c[1];
 			int ti = tc;
-			int cout = ti / widthCount;
-			return cout;
+			int count = ti / widthCount;
+			return count;
 		}
 		else
 		{
-			int cout = i / widthCount;
-			return cout;
+			int count = i / widthCount;
+			return count;
 		}
 	}
 
@@ -79,13 +79,13 @@ public:
 		{
 			const TCHAR tc = c[0] + c[1];
 			int ti = tc;
-			int cout = ti % widthCount;
-			return cout;
+			int count = ti % widthCount;
+			return count;
 		}
 		else
 		{
-			int cout = i % widthCount;
-			return cout;
+			int count = i % widthCount;
+			return count;
 		}
 	}
 };

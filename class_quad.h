@@ -154,7 +154,7 @@ public:
         glDrawBuffers(5, attachments);
         //检查帧缓冲是否是完整
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            Print::Line("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+            Print::Debug("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
         //解绑当前绑定帧缓冲
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         //图像的模糊处理
@@ -191,7 +191,7 @@ public:
             }
 
             if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-                Print::Line("Framebuffer not complete!");
+                Print::Debug("Framebuffer not complete!");
         }
         //记得要解绑帧缓冲，保证我们不会不小心渲染到错误的帧缓冲上
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -248,7 +248,7 @@ public:
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, Bloom::rbo);
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            Print::Line("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+            Print::Debug("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
@@ -270,12 +270,14 @@ private:
     static GLuint texture;
 private:
     static Shader fontShader;
+    //static Shader miniMapShader1;
 public:
     UI()
     {
         First();
         shader = Shader(Path_Shader + "ui.vert", Path_Shader + "ui.frag");
         fontShader = Shader(Path_Shader + "ui.vert", Path_Shader + "ui_font.frag");
+        //miniMapShader1 = Shader(Path_Shader + "ui_miniMap.vert", Path_Shader + "ui.frag");
     }
 
     UI(string path_vert, string path_frag)
@@ -294,6 +296,7 @@ public:
         {
             Create();
             //Load_texture(&texture, Path_Text + "text.png");
+            //初始化自定义的字体符号贴图
             Load_texture(&texture, Path_Text + TextSystem::MapPath());
             Print::Debug("UI纹理对象初始化：" + to_string(texture));
             first = false;
@@ -307,12 +310,30 @@ public:
         //Load_texture(&texture, Path_Text + TextSystem::MapPath());
         glBindVertexArray(vAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D,texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, texture);
     }
 
     void Use_shader()
     {
         shader.use();
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, texture);
     }
 
     void Use_fontShader()
@@ -320,11 +341,22 @@ public:
         fontShader.use();
         //FontColor(vec4(0.2f,0.4f,0.4f,1.0f));
         FontColor(vec4(0.0f));
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE4);
+        glBindTexture(GL_TEXTURE_2D, texture);
     }
     Shader FontShader()
     {
         return fontShader;
     }
+
 
     static void Create()
     {
@@ -363,6 +395,15 @@ public:
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+        //glGenVertexArrays(1, &vAO_MiniMap);
+        //glGenBuffers(1, &vBO_MiniMap);
+        //glBindVertexArray(vAO_MiniMap);
+        //glBindBuffer(GL_ARRAY_BUFFER, vBO_MiniMap);
+        //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_Quad), &vertices_Quad, GL_STATIC_DRAW);
+        //glEnableVertexAttribArray(0);
+        //glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+        //glEnableVertexAttribArray(1);
+        //glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
     }
 
     /// <summary>
@@ -417,6 +458,63 @@ public:
 
     void DrawImage(GLuint _texture, float _widthPoint, float _lengthPoint, float _width, float _height)
     {
+        float scr_min = SCR_WIDTH;
+        float scr_max = SCR_HEIGHT;
+        float scr_w = scr_min / scr_min;//宽高比
+        float scr_h = scr_min / scr_max;
+        float ui_length = _height / (scr_min);//ui大小
+        float ui_width = _width / (scr_min);
+        float l_cout = _lengthPoint * 2 / SCR_HEIGHT;//长宽所对应的位置偏移
+        float w_cout = _widthPoint * 2 / SCR_WIDTH;
+        float vertices_Quad[] = {
+            (-1.0f * ui_width * scr_w) + w_cout, (1.0f * ui_length * scr_h) + l_cout, 0.0f, 1.0f,
+            (-1.0f * ui_width * scr_w) + w_cout, (-1.0f * ui_length * scr_h) + l_cout,  0.0f, 0.0f,
+            (1.0f * ui_width * scr_w) + w_cout, (-1.0f * ui_length * scr_h) + l_cout,  1.0f, 0.0f,
+
+            (-1.0f * ui_width * scr_w) + w_cout,  (1.0f * ui_length * scr_h) + l_cout,  0.0f, 1.0f,
+            (1.0f * ui_width * scr_w) + w_cout, (-1.0f * ui_length * scr_h) + l_cout,  1.0f, 0.0f,
+            (1.0f * ui_width * scr_w) + w_cout,  (1.0f * ui_length * scr_h) + l_cout,  1.0f, 1.0f
+        };
+        glBindVertexArray(vAO);
+        glBindBuffer(GL_ARRAY_BUFFER, vBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_Quad), &vertices_Quad, GL_STATIC_DRAW);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, _texture);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
+
+    //渲染迷你地图时使用
+    void DrawImage_MiniMap(GLuint _texture, float _widthPoint, float _lengthPoint, float _width, float _height, vec2 _QuadTexturePoint1, vec2 _QuadTexturePoint2, vec2 _QuadTexturePoint3, vec2 _QuadTexturePoint4)
+    {
+        float scr_min = SCR_WIDTH;
+        float scr_max = SCR_HEIGHT;
+        float scr_w = scr_min / scr_min;//宽高比
+        float scr_h = scr_min / scr_max;
+        float ui_length = _height / (scr_min);//ui大小
+        float ui_width = _width / (scr_min);
+        float l_cout = _lengthPoint * 2 / SCR_HEIGHT;//长宽所对应的位置偏移
+        float w_cout = _widthPoint * 2 / SCR_WIDTH;
+        float vertices_Quad[] = {
+            (-1.0f * ui_width * scr_w) + w_cout, (1.0f * ui_length * scr_h) + l_cout, _QuadTexturePoint2.x, _QuadTexturePoint2.y,
+            (-1.0f * ui_width * scr_w) + w_cout, (-1.0f * ui_length * scr_h) + l_cout,  _QuadTexturePoint1.x, _QuadTexturePoint1.y,
+            (1.0f * ui_width * scr_w) + w_cout, (-1.0f * ui_length * scr_h) + l_cout,  _QuadTexturePoint3.x, _QuadTexturePoint3.y,
+
+            (-1.0f * ui_width * scr_w) + w_cout,  (1.0f * ui_length * scr_h) + l_cout,  _QuadTexturePoint2.x, _QuadTexturePoint2.y,
+            (1.0f * ui_width * scr_w) + w_cout, (-1.0f * ui_length * scr_h) + l_cout,  _QuadTexturePoint3.x, _QuadTexturePoint3.y,
+            (1.0f * ui_width * scr_w) + w_cout,  (1.0f * ui_length * scr_h) + l_cout,  _QuadTexturePoint4.x, _QuadTexturePoint4.y
+        };
+        glBindVertexArray(vAO);
+        glBindBuffer(GL_ARRAY_BUFFER, vBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_Quad), &vertices_Quad, GL_STATIC_DRAW);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, _texture);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
+
+    //更多信息的字体渲染
+    void DrawImage(GLuint _texture, float _widthPoint, float _lengthPoint, float _width, float _height, void* _ui_font)
+    {
+        //vec4 _color = _ui_font.color;
         float scr_min = SCR_WIDTH;
         float scr_max = SCR_HEIGHT;
         float scr_w = scr_min / scr_min;//宽高比

@@ -7,16 +7,18 @@ void Loop();
 
 int main()
 {
-    system("color a");
+    //system("color a");
     Print::Line("Hello Gamer!");
     Initialization();
+    Load_Texture_NULL();
     Open_framebuffers();
     Open_shadow();
     Open_ssao();
+    Open_skybox();
     Loop();
 }
 
-void Loop() 
+void Loop()
 {
     Scene s;
     scene = &s;
@@ -24,9 +26,10 @@ void Loop()
     FixedUpdateThread.detach();
     WindowOnLoad = true;
     GetTime = glfwGetTime;
-    while (!glfwWindowShouldClose(Window))
+    while (!glfwWindowShouldClose(Window) || Is_Loading || Is_FixedUpdate)
     {
         Load_loop();
+        Process_RealTimeChange();
         Load_matrix_(&Projection_Mat4, &View_Mat4, 'p');
         Open_shadow_firstrender_begin();
         scene->Draw_Shadow();
@@ -38,11 +41,11 @@ void Loop()
         Open_ssao_threadrender();
         //Open_ssao_fourthrender();
         Open_framebuffers_firstrender();
+
         scene->Draw();
         Render_TextQuad();
         Open_framebuffers_secondrender();
         scene->Draw_UI();
-
         //Render_TextQuad();
         End_loop();
     }

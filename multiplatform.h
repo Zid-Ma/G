@@ -45,11 +45,14 @@ public:
 
 	static void Debug(string s)
 	{
-		return ;
+		//return ;
 		try 
 		{
+			HANDLE outHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+			//ÂÌÉ«
+			SetConsoleTextAttribute(outHandle, 0x02);
 			cout << "Debug:" << s << endl;
-			//cout << "\033[32mDebug:" << s  << "\033[0m" << endl;
+			//count << "\033[32mDebug:" << s  << "\033[0m" << endl;
 		}
 		catch (exception e)
 		{
@@ -61,7 +64,40 @@ public:
 	{
 		try
 		{
+			/*
+				´úºÅ	ÑÕÉ«
+				0	ºÚÉ«
+				1	À¶É«
+				2	ÂÌÉ«
+				3	Ç³ÂÌÉ«
+				4	ºìÉ«
+				5	×ÏÉ«
+				6	»ÆÉ«
+				7	°×É«
+				8	»ÒÉ«
+				9	µ­À¶É«
+				A / a	µ­ÂÌÉ«
+				B / b	µ­Ç³ÂÌÉ«
+				C / c	µ­ºìÉ«
+				D / d	µ­×ÏÉ«
+				E / e	µ­»ÆÉ«
+				F / f	ÁÁ°×É«
+			*/
+			HANDLE outHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+			//ºìÉ«
+			SetConsoleTextAttribute(outHandle, 0x04);
+			//system("color c");
 			cout << "Exception:" << s << endl;
+			if (false)
+			{
+				cout << "Please wait 3 second......" << endl;
+				Sleep(1000);//Ë¯Ãß3Ãë
+				cout << "Please wait 2 second...." << endl;
+				Sleep(1000);//Ë¯Ãß3Ãë
+				cout << "Please wait 1 second.." << endl;
+				Sleep(1000);//Ë¯Ãß3Ãë
+			}
+			//system("color a");
 		}
 		catch (exception e)
 		{

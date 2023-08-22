@@ -4,9 +4,9 @@ resolution 0
 illumination -1
 shadow -1
 multisample -1
-ssao -1
+ssao 0
 fps 3
 fpsdisplay -1
-blend 0
+blend -1
 cullface 0
 srgb 0

@@ -76,7 +76,7 @@ void Open_ssao()
         // - Finally check if framebuffer is complete
         //检查深度缓冲对象是否创建成功
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            std::cout << "GBuffer Framebuffer not complete!" << std::endl;
+            Print::Debug("GBuffer Framebuffer not complete!");
         //glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 
@@ -94,7 +94,7 @@ void Open_ssao()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBuffer, 0);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "SSAO Framebuffer not complete!" << std::endl;
+        Print::Debug("SSAO Framebuffer not complete!");
     // - and blur stage
     //模糊ssao颜色缓冲
     glBindFramebuffer(GL_FRAMEBUFFER, ssaoBlurFBO);
@@ -105,7 +105,7 @@ void Open_ssao()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBufferBlur, 0);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "SSAO Blur Framebuffer not complete!" << std::endl;
+        Print::Debug("SSAO Blur Framebuffer not complete!");
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // Sample kernel
     //ssao半圆核心

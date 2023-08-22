@@ -44,7 +44,11 @@ using namespace glm;
 #include "data_shader.h"
 #include "data_light.h"
 #include "data_layer.h"
+#include "data_texture.h"
+#include "data_loop.h"
 
+#include "data_miniMap.h"
+#include "data_story.h"
 #include "data_game.h"
 #include "data_camera.h"
 #include "data_player.h"
@@ -55,7 +59,7 @@ using namespace glm;
 #include "data_set.h"
 #include "function_event.h"
 
-#include "../C++/G/sdk/public/steam/steam_api.h"
+#include "../ProgramDevelopment/C++/XYKS_20210410_G/sdk/public/steam/steam_api.h"
 //#include "../C++/G/sdk/\steamworksexample/Main.cpp"
 #include "steam.h"
 
@@ -111,7 +115,7 @@ void Initialization(void) {
 
     //如果窗体对象出现问题
     if (Window == NULL) {
-        Print::Line("创建窗体对象时失败");
+        Print::Debug("创建窗体对象时失败");
     }
     //设置窗口的上下文为当前线程的主上下文
     glfwMakeContextCurrent(Window);
@@ -150,7 +154,7 @@ void Initialization(void) {
 
     //if (!RegisterClass(&wc)) // Attempt To Register The Window Class  
     //{
-    //    cout << "Failed to register the Window." << endl;
+    //    count << "Failed to register the Window." << endl;
     //}
 
     ////创建窗体
@@ -245,7 +249,7 @@ void Initialization(void) {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         //返回初始化失败信息
-        Print::Line("Failed to initialize GLAD - GLAD初始化失败");
+        Print::Debug("Failed to initialize GLAD - GLAD初始化失败");
         //return -1;
     }
 
@@ -262,7 +266,7 @@ void Initialization(void) {
     {
         //启用深度测试
         glEnable(GL_DEPTH_TEST);
-        Print::Line("启用深度测试");
+        Print::Debug("启用深度测试");
         //指定“目标像素与当前像素在z方向上值大小比较”的函数，符合该函数关系的目标像素才进行绘制，否则对目标像素不予绘制。
         //glDepthFunc(GL_LESS);//GL_LESS,如果输入的深度值小于参考值，则通过
     }
@@ -272,7 +276,7 @@ void Initialization(void) {
     {
         //启用模板测试
         glEnable(GL_STENCIL_TEST);
-        Print::Line("启用模板测试");
+        Print::Debug("启用模板测试");
         //告诉OpenGL，只要一个片段的模板值等于(GL_EQUAL)参考值1，片段将会通过测试并被绘制，否则会被丢弃。
         glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
         //指定更新模板缓冲的时机与行为
@@ -287,7 +291,7 @@ void Initialization(void) {
     {
         //启用混合
         glEnable(GL_BLEND);
-        Print::Line("启用混合");
+        Print::Debug("启用混合");
         //设置源和目标因子
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         //也可以使用glBlendFuncSeparate为RGB和alpha通道分别设置不同的选项：
@@ -303,10 +307,10 @@ void Initialization(void) {
     {
         //启用面剔除
         glEnable(GL_CULL_FACE);
-        Print::Line("启用面剔除");
+        Print::Debug("启用面剔除");
         //剔除背面
         glCullFace(GL_BACK);
-        Print::Line("剔除背面");
+        Print::Debug("剔除背面");
         //顺时针为正向面(初始为CL_CWW逆时针为正向)
         //glFrontFace(GL_CW);
         //Print::Line("设置顺时针为正向面");
@@ -317,7 +321,7 @@ void Initialization(void) {
     {
         //启用顶点着色器点大小修改
         glEnable(GL_PROGRAM_POINT_SIZE);
-        Print::Line("启用顶点着色器点大小修改");
+        Print::Debug("启用顶点着色器点大小修改");
     }
     //抗锯齿
     // -------
@@ -325,7 +329,7 @@ void Initialization(void) {
     {
         //启用多重采样
         glEnable(GL_MULTISAMPLE);
-        Print::Line("启用多重采样");
+        Print::Debug("启用多重采样");
         //启用抗锯齿
         glEnable(GL_BLEND);             //启用混合功能，将图形颜色同周围颜色相混合  
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -335,7 +339,7 @@ void Initialization(void) {
         glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
         glEnable(GL_POINT_SMOOTH);       //点抗锯齿  
         glHint(GL_POINT_SMOOTH, GL_NICEST);
-        Print::Line("启用抗锯齿");
+        Print::Debug("启用抗锯齿");
     }
     //gamma校正
     //--------
@@ -343,7 +347,7 @@ void Initialization(void) {
     {
         //启用sRGB颜色空间//OpenGL将自动执行gamma校正，包括默认帧缓冲
         glEnable(GL_FRAMEBUFFER_SRGB);
-        Print::Line("启用sRGB颜色空间(将会自动执行gamma校正");
+        Print::Debug("启用sRGB颜色空间(将会自动执行gamma校正");
     }
 #pragma endregion
 
@@ -352,15 +356,16 @@ void Initialization(void) {
     int nrAttributes = 0;
     //查询顶点属性的最大支持量
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-    Print::Line("支持顶点属性的最大数量：" + to_string(nrAttributes));
+    Print::Debug("支持顶点属性的最大数量：" + to_string(nrAttributes));
     glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &nrAttributes);
-    Print::Line("支持uniform的最大数量：" + to_string(nrAttributes));
+    Print::Debug("支持uniform的最大数量：" + to_string(nrAttributes));
 
-    Print::Line("XXX:" + to_string(2));
+    Print::Debug("XXX:" + to_string(2));
 #pragma endregion
 
     //HInstance = GetActiveWindow();
     //InRealMain((LPSTR)"", (HINSTANCE)HInstance, SW_SHOW);//以原来的尺寸显示窗口
+
 }
 
 //------
@@ -395,7 +400,7 @@ string get_path()
             finalpath.append(path.substr(i, 1));
         }
     }
-    Print::Line("当前应用程序路径：" + finalpath);
+    Print::Debug("当前应用程序路径：" + finalpath);
     return finalpath;
 }
 //设置应用程序路径
@@ -452,6 +457,7 @@ void get_gobal()
 
 #include "class_crops.h"
 
+#include "advanced_skybox.h"
 #include "advanced_framebuffers.h"
 #include "advanced_ScreenSpaceAmbientOcclusion.h"
 

@@ -2,6 +2,7 @@
 void Process_Event_Mouse(vec3 _direction);
 void Process_Event_MouseRight(vec3 _direction);
 void Process_UIEvent_Mouse(vec3 _click_point);
+void Process_UIPress_Mouse(vec3 _press_point);
 void Process_Down_F(GLFWwindow* window);
 void Process_Down_R(GLFWwindow* window);
 void Process_Down_T(GLFWwindow* window);
@@ -14,6 +15,8 @@ bool T_Release = true;//按T进行输入模式的切换
 vec3 LastPlayerPos;
 bool PlayerToEarth = false;
 bool Ctrl_Release = true;
+//鼠标左键按下冷却
+static float MouseButtonLeftDownDeltaTime = 0.0f;
 //------
 //处理所有输入：查询GLFW是否在此帧中按下/释放相关键并做出相应反应//process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 //------
@@ -123,8 +126,21 @@ void processInput(GLFWwindow* window)
     LastPlayerPos = PlayerPos;
 }
 
+//实时更新
+void Process_RealTimeChange()
+{
+    //鼠标按下冷却
+    if (MouseButtonLeftDownDeltaTime > 0.0f)
+    {
+        MouseButtonLeftDownDeltaTime += DeltaTime;
+        if (MouseButtonLeftDownDeltaTime > 1.0f)
+            MouseButtonLeftDownDeltaTime = 0.0f;
+    }
+}
+
 //鼠标的位置位置自屏幕左上方往右下为正
 static vec3 Cursor_Point = vec3(0.0f);
+static vec3 Last_cursor_point = vec3(0.0f);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
     vec3 cursor_point_screenCenter = vec3(Cursor_Point.x - (SCR_WIDTH/2), -(Cursor_Point.y - (SCR_HEIGHT / 2)), Cursor_Point.z);
@@ -136,7 +152,32 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         {
         case GLFW_MOUSE_BUTTON_LEFT:
             //"Mosue left button clicked!"
-            Process_UIEvent_Mouse(cursor_point_screenCenter);
+            if (MouseButtonLeftDownDeltaTime == 0.0f || true)
+            {
+                MouseButtonLeftDownDeltaTime = 0.1f;
+                Process_UIPress_Mouse(cursor_point_screenCenter);
+                Last_cursor_point = cursor_point_screenCenter;
+            }
+            //Print::Debug("鼠标按下时基于屏幕中心点的位置：" + to_string(cursor_point_screenCenter.x)+ "???" + to_string(cursor_point_screenCenter.y));
+            break;
+        case GLFW_MOUSE_BUTTON_MIDDLE:
+            //"Mosue middle button clicked!"
+            break;
+        case GLFW_MOUSE_BUTTON_RIGHT:
+            //"Mosue right button clicked!"
+            break;
+        default:
+            return;
+        }
+        else if (action == GLFW_RELEASE) switch (button)
+        {
+        case GLFW_MOUSE_BUTTON_LEFT:
+            //"Mosue left button clicked!"
+            if (distance(Last_cursor_point, cursor_point_screenCenter) < 10.0f)
+            {
+                Process_UIEvent_Mouse(cursor_point_screenCenter);
+                Last_cursor_point = vec3(0.0f);
+            }
             //Print::Debug("鼠标按下时基于屏幕中心点的位置：" + to_string(cursor_point_screenCenter.x)+ "???" + to_string(cursor_point_screenCenter.y));
             break;
         case GLFW_MOUSE_BUTTON_MIDDLE:
@@ -318,7 +359,7 @@ void AspotLight()
         Active_shader_spotLight = false;
         Active_shader_dirLight = true;
         Active_shader_pointLight = true;
-        Print::Line(to_string(Active_shader_dirLight));
+        Print::Debug(to_string(Active_shader_dirLight));
     }
     else
     {
@@ -326,7 +367,108 @@ void AspotLight()
         Active_shader_spotLight = true;
         Active_shader_dirLight = true;
         Active_shader_pointLight = true;
-        Print::Line(to_string(Active_shader_spotLight));
+        Print::Debug(to_string(Active_shader_spotLight));
+    }
+}
+static vector<int> Hover_Last_ui_font_count;
+static vector<UI_Font*> Hover_Last_ui_font;
+void Process_UIHover_Mouse(vec3 _hover_point)
+{
+    UI_Font* current_font = NULL;
+    //Print::Line("???" + to_string(Hover_Mouse.size()));
+    //鼠标悬停时改变字体颜色
+    for (int i = 0; i < Hover_Mouse.size(); i++)
+    {
+        if (Hover_Mouse[i].CheckEvent(_hover_point, "hover"))
+        {
+            current_font = Hover_Mouse[i].ui_Font;
+            if (Hover_Mouse[i].Function != NULL)
+                //Print::Debug("剩下的");
+                Hover_Mouse[i].Function();
+            bool _last = false;
+            for (int iv = 0; iv < Hover_Last_ui_font.size(); iv++)
+            {
+                if (Hover_Last_ui_font[iv] == Hover_Mouse[i].ui_Font)
+                {
+                    _last = true;
+                }
+            }
+            if (!_last)
+            {
+                Hover_Last_ui_font.push_back(Hover_Mouse[i].ui_Font);
+                Hover_Last_ui_font_count.push_back(0);
+                Hover_Mouse[i].ui_Font->color = vec4(0.1f, 0.3f, 0.8f, 1.0f);
+            }
+            break;
+        }
+    }
+    if (Hover_Last_ui_font.size() > 0)
+    {
+        //重置字体颜色
+        for (int i = 0; i < Hover_Last_ui_font.size(); i++)
+        {
+            //时间计数
+            Hover_Last_ui_font_count[i]++;
+            if (Hover_Last_ui_font_count[i] > 3 && Hover_Last_ui_font[i] != current_font)
+            {
+                Hover_Last_ui_font[i]->color = vec4(0.0f);
+                Hover_Last_ui_font[i] = NULL;
+                Hover_Last_ui_font_count[i] = 0;
+                Hover_Last_ui_font.erase(Hover_Last_ui_font.begin() + i);
+                Hover_Last_ui_font_count.erase(Hover_Last_ui_font_count.begin() + i);
+            }
+        }
+    }
+}
+static vector<int> Press_Last_ui_font_count;
+static vector<UI_Font*> Press_Last_ui_font;
+void Process_UIPress_Mouse(vec3 _press_point)
+{
+    UI_Font* current_font = NULL;
+    //Print::Line("???" + to_string(Hover_Mouse.size()));
+    //鼠标按下时改变字体颜色
+    for (int i = 0; i < Press_Mouse.size(); i++)
+    {
+        if (Press_Mouse[i].CheckEvent(_press_point, "press"))
+        {
+            current_font = Press_Mouse[i].ui_Font;
+            //假如函数不为空，则调用函数
+            if (Press_Mouse[i].Function != NULL)
+                //Print::Debug("剩下的");
+                Press_Mouse[i].Function();
+            bool _last = false;
+            for (int iv = 0; iv < Press_Last_ui_font.size(); iv++)
+            {
+                //当找到已激活改变颜色的字体时
+                if (Press_Last_ui_font[iv] == Press_Mouse[i].ui_Font)
+                {
+                    _last = true;
+                }
+            }
+            //改变字体颜色
+            if (!_last)
+            {
+                Press_Last_ui_font.push_back(Press_Mouse[i].ui_Font);
+                Press_Last_ui_font_count.push_back(0);
+                Press_Mouse[i].ui_Font->color = vec4(0.1f, 0.3f, 0.8f, 1.0f);
+            }
+            break;
+        }
+    }
+    if (Press_Last_ui_font.size() > 0)
+    {
+        for (int i = 0; i < Press_Last_ui_font.size(); i++)
+        {
+            Press_Last_ui_font_count[i]++;
+            if (Press_Last_ui_font_count[i] > 5 && Press_Last_ui_font[i] != current_font)
+            {
+                Press_Last_ui_font[i]->color = vec4(0.0f);
+                Press_Last_ui_font[i] = NULL;
+                Press_Last_ui_font_count[i] = 0;
+                Press_Last_ui_font.erase(Press_Last_ui_font.begin() + i);
+                Press_Last_ui_font_count.erase(Press_Last_ui_font_count.begin() + i);
+            }
+        }
     }
 }
 void Process_Event_Mouse(vec3 _direction)
@@ -379,10 +521,12 @@ void Process_Event_Mouse(vec3 _direction)
 }
 void Process_UIEvent_Mouse(vec3 _click_point)
 {
+    //cout << Event_Mouse.size() << endl;
     for (int i = 0; i < Event_Mouse.size(); i++)
     {
         if (Event_Mouse[i].CheckEvent(_click_point) && Event_Mouse[i].Function != NULL)
         {
+            //cout << "???" << endl;
             //Print::Debug("剩下的");
             Event_Mouse[i].Function();
         }

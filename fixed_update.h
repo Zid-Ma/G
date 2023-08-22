@@ -8,10 +8,11 @@ static float FixedCount = 0.0f;
 static int Fixededed = 0;
 void FixedUpdate()
 {
+	Is_FixedUpdate = true;
 	thread t(FixedTime);
 	t.detach();
 	FixedOnLoad = true;
-	while (!glfwWindowShouldClose(Window))
+	while (!glfwWindowShouldClose(Window) || Is_FixedTimeUpdate)
 	{
 		if (WindowOnLoad && FixedOnLoad)
 		{
@@ -41,26 +42,31 @@ void FixedUpdate()
 			}
 			if (FixedCount > 1.0f)
 			{
-				//cout << cha << endl;
-				//cout << currentFrame << endl;
-				//cout << currentFrame_last << endl;
-				//cout << haomiao << endl;//
-				//cout << 1000.0f * FixedDeltaTime << endl;
-				//cout << Fixededed << endl;
+				//count << cha << endl;
+				//count << currentFrame << endl;
+				//count << currentFrame_last << endl;
+				//count << haomiao << endl;//
+				//count << 1000.0f * FixedDeltaTime << endl;
+				//count << Fixededed << endl;
 				Fixededed = 0;
 				FixedCount = 0.0f;
 				Crops_Time::FixedUpdate();
+
 			}
+			vec3 cursor_point_screenCenter = vec3(Cursor_Point.x - (SCR_WIDTH / 2), -(Cursor_Point.y - (SCR_HEIGHT / 2)), Cursor_Point.z);
+			Process_UIHover_Mouse(cursor_point_screenCenter);
 			//xtime xti;
 			//xti.sec = 3;
 			//std::this_thread::sleep_until(&xti);
 			//SuspendThread(FixedUpdateThread.native_handle());
 		}
+		Is_FixedUpdate = false;
 	}
 }
 
 void FixedTime()
 {
+	Is_FixedTimeUpdate = true;
 	while (!glfwWindowShouldClose(Window))
 	{
 		if (!FixedOnLoad)
@@ -70,4 +76,5 @@ void FixedTime()
 			Sleep(1000.0f / FixedUpdatePerSecond);
 		}
 	}
+	Is_FixedTimeUpdate = false;
 }

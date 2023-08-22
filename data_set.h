@@ -38,6 +38,7 @@ public:
 		*find_data(_name) = _i;
 	}
 public:
+	//读取相应设置
 	void Read()
 	{
 		path = Path_Resources + "settings/";
@@ -68,7 +69,7 @@ public:
 		while (getline(infile, s))
 		{
 			s = UTF8ToGB(s.c_str());
-			//cout << s << endl;
+			//count << s << endl;
 			if (active_wirte)
 			{
 				if (data(s))
@@ -97,18 +98,18 @@ public:
 		while (getline(infile, s))
 		{
 			s = UTF8ToGB(s.c_str());
-			//cout << s << endl;
-			if (active_wirte)
-			{
-				if (data(s))
-				{
-					active_wirte = false;
-				}
-			}
-			else if (line_game(s))
-			{
-				active_wirte = true;
-			}
+			//count << s << endl;
+if (active_wirte)
+{
+	if (data(s))
+	{
+		active_wirte = false;
+	}
+}
+else if (line_game(s))
+{
+	active_wirte = true;
+}
 		}
 		infile.clear();
 		infile.close();             //关闭文件输入流 
@@ -132,8 +133,8 @@ public:
 		ofstream out(_path);
 		string _s;
 		_s = "#XYKS自定义数据文件" + GetEnter();
-		string _names[] = {"Plant_Score"};
-		string _datas[] = { to_string(Plant_Score) };
+		string _names[] = { "Plant_Score", "StoryLine"};
+		string _datas[] = { to_string(Get_Plant_Score()), to_string(StoryLine) };
 		for (int i = 0; i < 1; i++)
 		{
 			_s.append(_names[i]);
@@ -166,15 +167,15 @@ private:
 		{
 			return false;
 		}
-		else if(_s.substr(0,1) == "#")
-		{ 
+		else if (_s.substr(0, 1) == "#")
+		{
 			return false;
 		}
 		for (int i = 0; i < sets.size(); i++)
 		{
 			if (_s.substr(0, setnames[i].size()) == setnames[i])
 			{
-				Print::Debug(_s.substr(0, setnames[i].size()));
+				//Print::Debug(_s.substr(0, setnames[i].size()));
 				*sets[i] = atoi(_s.substr(setnames[i].size() + 1).c_str());
 				Print::Debug(setnames[i] + ":" + to_string(*sets[i]));
 			}
@@ -196,6 +197,10 @@ private:
 			if (_s.substr(0, setnames[i].size()) == "Plant_Score")
 			{
 				Set_Plant_Score(atoll(_s.substr(setnames[i].size() + 1).c_str()));
+			}
+			else if (_s.substr(0, setnames[i].size()) == "StoryLine")
+			{
+				StoryLine = atoll(_s.substr(setnames[i].size() + 1).c_str());
 			}
 		}
 		return false;
@@ -251,7 +256,27 @@ private:
 			break;
 		}
 		Active_ssao = *find_data("ssao");
-		FramesPerSecondX = *find_data("fps");
+		switch (*find_data("fps"))
+		{
+		case -1:
+			FramesPerSecondX = -1;
+			break;
+		case 0:
+			FramesPerSecondX = 30;
+			break;
+		case 1:
+			FramesPerSecondX = 60;
+			break;
+		case 2:
+			FramesPerSecondX = 144;
+			break;
+		case 3:
+			FramesPerSecondX = 240;
+			break;
+		case 4:
+			FramesPerSecondX = 0;
+			break;
+		}
 		FramesPerSecondDisplay = *find_data("fpsdisplay");
 		Active_blend = *find_data("blend");
 		Active_cull_face = *find_data("cullface");

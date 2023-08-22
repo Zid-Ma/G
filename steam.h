@@ -2,12 +2,12 @@
 #include "sdk/public/steam/isteamuserstats.h"
 
 static ISteamUserStats* Steam_UserState;
-static bool Steam_Test = true;
+static bool Steam_Test = false;
 static int Steam_Appid = 1893580;
 
 static bool Achievement_first[] = { true,true,true,true };
 static string Achievement_names[] = { "XYKS", "鼻祖", "至高的神","至高至强至善的魔王"};
-static string Achievement_Apinames[] = { "ACHIEVEMENT_1_0", "ACHIEVEMENT_1_1", "ACHIEVEMENT_1_2","ACHIEVEMENT_1_2"};
+static string Achievement_Apinames[] = { "ACHIEVEMENT_1_0", "ACHIEVEMENT_1_1", "ACHIEVEMENT_1_2","ACHIEVEMENT_1_3"};
 //解锁成就
 void UnlockAchievement(string _apiname);
 static void InitSteamApi()
@@ -92,20 +92,20 @@ void RealUnlockAchievement(string _apiname)
 
 long long Get_Plant_Score()
 {
-	return Plant_Score;
+	return Plant_Score - 629;
 }
 void Set_Plant_Score(long long _i)
 {
-	Plant_Score = _i;
-	if (Plant_Score > 999999)
+	Plant_Score = _i + 629;
+	if (Get_Plant_Score() > 999999)
 	{
-		if (Plant_Score > 99999999 && Achievement_first[2] == true)
+		if (Get_Plant_Score() > 99999999 && Achievement_first[2] == true)
 		{
 			RealUnlockAchievement(Achievement_Apinames[2]);
 			Achievement_first[2] = false;
 
 		}
-		else if (Plant_Score > 9999999999 && Achievement_first[3] == true)
+		else if (Get_Plant_Score() > 9999999999 && Achievement_first[3] == true)
 		{
 			RealUnlockAchievement(Achievement_Apinames[3]);
 			Achievement_first[3] = false;
@@ -118,13 +118,11 @@ void Set_Plant_Score(long long _i)
 				Achievement_first[1] = false;
 			}
 		}
-
 	}
 }
 
 void End_SteamAPI()
 {
-
 	SteamAPI_Shutdown();
 }
 

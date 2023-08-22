@@ -77,7 +77,7 @@ struct SpotLight {
 
 //全局信息
 //--------
-struct Active{
+struct AttritubeActive{
     bool dirLight;
     bool pointLight;
     bool spotLight;
@@ -92,7 +92,7 @@ uniform Material material;
 uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform SpotLight spotLight;
-uniform Active active;
+uniform AttritubeActive attritubeActive;
 
 //函数定义
 //--------
@@ -130,9 +130,6 @@ void LoadSSAO()
 
 void main()
 {
-    if(texture(screenTexture, TexCoords).r < 0.2f)
-        discard;
-
     //数据初始化
     //----------
     //是否启用blinn-phong模型
@@ -176,19 +173,19 @@ void main()
 
     // 第一阶段：定向光照
     vec3 result;
-    //if(active.dirLight)
+    //if(attritubeActive.dirLight)
     {
         result = CalcDirLight(dirLight, norm, viewDir); 
     }
     //vec3 result = vec3(0.5f)  * vec3(texture(material.diffuse, TexCoords));
     // 第二阶段：点光源
-    if(active.pointLight)
+    if(attritubeActive.pointLight)
     {
         for(int i = 0; i < NR_POINT_LIGHTS; i++)
             result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     }
     // 第三阶段：聚光
-    if(active.spotLight)
+    if(attritubeActive.spotLight)
     {
         result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
     }
@@ -292,6 +289,11 @@ void main()
     else{
         BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
     }
+
+FragColor = vec4(1.0f);
+    //material.diffuse//screenTexture
+    if(texture(material.diffuse, TexCoords).r < 0.2f)
+        discard;
 }
 
 //定向光函数

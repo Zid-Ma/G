@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -29,27 +29,27 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -83,12 +83,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>F:\Resources\Lib;$(IncludePath)</IncludePath>
-    <ExternalIncludePath>F:\Resources\Lib;$(ExternalIncludePath)</ExternalIncludePath>
-    <ReferencePath>F:\Resources\Lib;F:\Resources\C++\G\sdk\public\steam\lib\win32;$(ReferencePath)</ReferencePath>
-    <LibraryPath>F:\Resources\Lib;$(LibraryPath)</LibraryPath>
-    <SourcePath>F:\Resources\Lib;$(SourcePath)</SourcePath>
-    <LibraryWPath>F:\Resources\Lib;$(LibraryWPath)</LibraryWPath>
+    <IncludePath>F:\Resources\ProgramDevelopment\Source\Lib\C++\Lib_X86;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>F:\Resources\ProgramDevelopment\Source\Lib\C++\Lib_X86;$(ExternalIncludePath)</ExternalIncludePath>
+    <ReferencePath>F:\Resources\ProgramDevelopment\Source\Lib\C++\Lib_X86;F:\Resources\ProgramDevelopment\C++\XYKS_20210410_G\sdk\public\steam\lib\win32;$(ReferencePath)</ReferencePath>
+    <LibraryPath>F:\Resources\ProgramDevelopment\Source\Lib\C++\Lib_X86;$(LibraryPath)</LibraryPath>
+    <SourcePath>F:\Resources\ProgramDevelopment\Source\Lib\C++\Lib_X86;$(SourcePath)</SourcePath>
+    <LibraryWPath>F:\Resources\ProgramDevelopment\Source\Lib\C++\Lib_X86;$(LibraryWPath)</LibraryWPath>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -130,10 +131,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;SOIL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CONSOLE;SOIL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>F:\Resources\Lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -176,7 +178,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Lib\glad\glad.c" />
+    <ClCompile Include="..\..\Source\Lib\C++\Lib_X86\glad.c" />
     <ClCompile Include="G.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +186,7 @@
     <ClInclude Include="advanced_framebuffers.h" />
     <ClInclude Include="advanced_ScreenSpaceAmbientOcclusion.h" />
     <ClInclude Include="advanced_shadow.h" />
+    <ClInclude Include="advanced_skybox.h" />
     <ClInclude Include="check_collision.h" />
     <ClInclude Include="class_collider.h" />
     <ClInclude Include="class_collider_layer.h" />
@@ -192,8 +195,12 @@
     <ClInclude Include="class_ray.h" />
     <ClInclude Include="data_game.h" />
     <ClInclude Include="data_layer.h" />
+    <ClInclude Include="data_loop.h" />
+    <ClInclude Include="data_miniMap.h" />
     <ClInclude Include="data_set.h" />
     <ClInclude Include="data_shader.h" />
+    <ClInclude Include="data_story.h" />
+    <ClInclude Include="data_texture.h" />
     <ClInclude Include="fixed_update.h" />
     <ClInclude Include="language.h" />
     <ClInclude Include="class_math.h" />
@@ -296,6 +303,8 @@
     <None Include="resources\shader\simpleDepthShader.frag" />
     <None Include="resources\shader\simpleDepthShader.geom" />
     <None Include="resources\shader\simpleDepthShader.vert" />
+    <None Include="resources\shader\skybox.frag" />
+    <None Include="resources\shader\skybox.vert" />
     <None Include="resources\shader\ssao.frag" />
     <None Include="resources\shader\ssao.vert" />
     <None Include="resources\shader\ssao_blur.frag" />
